@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: selenosis
+  namespace: selenosis
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: selenosis
+  template:
+    metadata:
+      labels:
+        app: selenosis
+      namespace: selenosis
+    spec:
+      containers:
+      - args: ["/selenosis", "--browsers-config", "/etc/selenosis/browsers.yaml", "--namespace", "selenosis", "--service-name", "selenosis"]
+        image: alcounit/selenosis:develop
+        name: selenosis
+        ports:
+        - containerPort: 4444
+          name: selenium
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/selenosis
+          name: browsers-config
+        imagePullPolicy: Always
+      volumes:
+      - name: browsers-config
+        configMap:
+          name: selenosis-config
+
