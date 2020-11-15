@@ -20,7 +20,7 @@ spec:
       namespace: selenosis
     spec:
       containers:
-      - args: ["/selenosis", "--browsers-config", "/etc/selenosis/browsers.yaml", "--namespace", "selenosis", "--service-name", "selenosis", "--browser-limit", "40"]
+      - args: ["/selenosis", "--browsers-config", "./config/browsers.yaml", "--namespace", "selenosis", "--service-name", "seleniferous", "--browser-limit", "40"]
         image: alcounit/selenosis:latest
         name: selenosis
         ports:
