@@ -25,4 +25,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   namespace: selenosis
-  name: default
+  name: selenosis
