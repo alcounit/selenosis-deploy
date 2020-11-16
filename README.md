@@ -29,8 +29,8 @@ Check https://github.com/alcounit/selenosis for config examples. Create your own
  ```bash
 kubectl get svc -n selenosis
 NAME            TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-selenosis       ClusterIP      None           <none>        <none>           8h
-selenosis-app   LoadBalancer   10.43.201.60   <pending>     4444:31000/TCP   8h
+seleniferous       ClusterIP      None           <none>        <none>           8h
+selenosis   LoadBalancer   10.43.201.60   <pending>     4444:31000/TCP   8h
  ```
 If external IP is not assigned for selenosis use kubernetes node as access point
 
@@ -72,8 +72,8 @@ selenosis-694c76f757-6bgwl     1/1     Running   0          132m
 kubectl get svc -n selenosis
 NAME            TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
 selenoid-ui     LoadBalancer   10.43.48.95    <pending>     8080:32000/TCP   8h
-selenosis       ClusterIP      None           <none>        <none>           8h
-selenosis-app   LoadBalancer   10.43.201.60   <pending>     4444:31000/TCP   8h
+seleniferous       ClusterIP      None           <none>        <none>           8h
+selenosis   LoadBalancer   10.43.201.60   <pending>     4444:31000/TCP   8h
  ```
 
 If external IP is not assigned for selenoid-ui use kubernetes node as access point
