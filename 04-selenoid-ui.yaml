@@ -19,7 +19,7 @@ spec:
       namespace: selenosis
     spec:
       containers:
-        - args: ["--status-uri", "http://localhost:4444", "-webdriver-uri", "http://selenosis.selenosis:4444"]
+        - args: ["--status-uri", "http://localhost:4444", "-webdriver-uri", "http://selenosis:4444"]
           name: selenoid-ui
           imagePullPolicy: IfNotPresent
           image: aerokube/selenoid-ui:1.10.1
@@ -27,7 +27,7 @@ spec:
             - containerPort: 8080
               name: http
               protocol: TCP
-        - args: ["--port", ":4444", "--selenosis-url", "http://selenosis.selenosis:4444"]
+        - args: ["--port", ":4444", "--selenosis-url", "http://selenosis:4444"]
           name: selenoid-ui-adapter
           imagePullPolicy: IfNotPresent
           image: alcounit/adaptee:latest

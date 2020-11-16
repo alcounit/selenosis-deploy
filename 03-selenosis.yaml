@@ -28,7 +28,7 @@ spec:
           name: selenium
           protocol: TCP
         volumeMounts:
-        - mountPath: /etc/selenosis
+        - mountPath: ./config
           name: browsers-config
         imagePullPolicy: IfNotPresent
         readinessProbe:
