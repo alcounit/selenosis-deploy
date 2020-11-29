@@ -1,9 +1,14 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: selenosis
   namespace: selenosis
 spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   replicas: 2
   selector:
     matchLabels:
@@ -15,19 +20,32 @@ spec:
       namespace: selenosis
     spec:
       containers:
-      - args: ["/selenosis", "--browsers-config", "/etc/selenosis/browsers.yaml", "--namespace", "selenosis", "--service-name", "selenosis"]
-        image: alcounit/selenosis:develop
+      - args: ["/selenosis", "--browsers-config", "./config/browsers.yaml", "--namespace", "selenosis", "--service-name", "seleniferous", "--browser-limit", "40", "--proxy-image", "alcounit/seleniferous:v0.0.1-develop"]
+        image: alcounit/selenosis:v0.0.1-develop
         name: selenosis
         ports:
         - containerPort: 4444
           name: selenium
           protocol: TCP
         volumeMounts:
-        - mountPath: /etc/selenosis
+        - mountPath: ./config
           name: browsers-config
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 4444
+          periodSeconds: 2
+          initialDelaySeconds: 3
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 4444
+          periodSeconds: 2
+          initialDelaySeconds: 3
       volumes:
       - name: browsers-config
         configMap:
           name: selenosis-config
+
 
