@@ -30,7 +30,7 @@ spec:
         - args: ["--port", ":4444", "--selenosis-url", "http://selenosis:4444"]
           name: selenoid-ui-adapter
           imagePullPolicy: IfNotPresent
-          image: alcounit/adaptee:latest
+          image: alcounit/adaptee:v0.0.1-develop
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 0
