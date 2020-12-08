@@ -15,7 +15,7 @@
         }
     },
     "firefox": {
-        "defaultVersion": "82.0",
+        "defaultVersion": "83.0",
         "path": "/wd/hub",
         "versions": {
             "81.0": {
@@ -31,7 +31,7 @@
     },
 
     "opera" : {
-        "defaultVersion": "70.0",
+        "defaultVersion": "72.0",
         "path": "/",
         "versions": {
             "70.0": {
