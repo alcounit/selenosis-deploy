@@ -9,15 +9,15 @@ chrome:
     '87.0':
       image: selenoid/vnc:chrome_87.0
 firefox:
-  defaultVersion: "83.0"
+  defaultVersion: "84.0"
   path: "/wd/hub"
   versions:
-    '81.0':
-      image: selenoid/vnc:firefox_81.0
     '82.0':
       image: selenoid/vnc:firefox_82.0
     '83.0':
       image: selenoid/vnc:firefox_83.0
+    '84.0':
+      image: selenoid/vnc:firefox_84.0
 opera:
   defaultVersion: "72.0"
   path: "/"
