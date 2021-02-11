@@ -20,8 +20,8 @@ spec:
       namespace: selenosis
     spec:
       containers:
-      - args: ["/selenosis", "--browsers-config", "./config/browsers.yaml", "--namespace", "selenosis", "--service-name", "seleniferous", "--browser-limit", "40", "--proxy-image", "alcounit/seleniferous:v0.0.1-develop"]
-        image: alcounit/selenosis:v0.0.4-develop
+      - args: ["/selenosis", "--browsers-config", "./config/browsers.yaml", "--namespace", "selenosis", "--service-name", "seleniferous", "--browser-limit", "40", "--proxy-image", "alcounit/seleniferous:v0.0.2-develop"]
+        image: alcounit/selenosis:v0.0.5-develop
         name: selenosis
         ports:
         - containerPort: 4444
