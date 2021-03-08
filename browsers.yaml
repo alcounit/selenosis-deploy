@@ -1,30 +1,72 @@
 chrome:
-  defaultVersion: "87.0"
+  defaultVersion: "89.0"
   path: "/"
   versions:
+    '79.0':
+      image: selenoid/vnc:chrome_79.0
+    '80.0':
+      image: selenoid/vnc:chrome_80.0
+    '81.0':
+      image: selenoid/vnc:chrome_81.0
+    '83.0':
+      image: selenoid/vnc:chrome_83.0
+    '84.0':
+      image: selenoid/vnc:chrome_84.0
     '85.0':
       image: selenoid/vnc:chrome_85.0
     '86.0':
       image: selenoid/vnc:chrome_86.0
     '87.0':
       image: selenoid/vnc:chrome_87.0
+    '88.0':
+      image: selenoid/vnc:chrome_88.0
+    '89.0':
+      image: selenoid/vnc:chrome_89.0
 firefox:
-  defaultVersion: "84.0"
+  defaultVersion: "85.0"
   path: "/wd/hub"
   versions:
+    '76.0':
+      image: selenoid/vnc:firefox_76.0
+    '77.0':
+      image: selenoid/vnc:firefox_77.0
+    '78.0':
+      image: selenoid/vnc:firefox_78.0
+    '79.0':
+      image: selenoid/vnc:firefox_79.0
+    '80.0':
+      image: selenoid/vnc:firefox_80.0
+    '81.0':
+      image: selenoid/vnc:firefox_81.0
     '82.0':
       image: selenoid/vnc:firefox_82.0
     '83.0':
       image: selenoid/vnc:firefox_83.0
     '84.0':
       image: selenoid/vnc:firefox_84.0
+    '85.0':
+      image: selenoid/vnc:firefox_85.0
 opera:
-  defaultVersion: "72.0"
+  defaultVersion: "74.0"
   path: "/"
   versions:
+    '65.0':
+      image: selenoid/vnc:opera_65.0
+    '66.0':
+      image: selenoid/vnc:opera_66.0
+    '67.0':
+      image: selenoid/vnc:opera_67.0
+    '68.0':
+      image: selenoid/vnc:opera_68.0
+    '69.0':
+      image: selenoid/vnc:opera_69.0
     '70.0':
       image: selenoid/vnc:opera_70.0
     '71.0':
       image: selenoid/vnc:opera_71.0
     '72.0':
       image: selenoid/vnc:opera_72.0
+    '73.0':
+      image: selenoid/vnc:opera_73.0
+    '74.0':
+      image: selenoid/vnc:opera_74.0
