@@ -23,7 +23,7 @@ chrome:
     '89.0':
       image: selenoid/vnc:chrome_89.0
 firefox:
-  defaultVersion: "85.0"
+  defaultVersion: "86.0"
   path: "/wd/hub"
   versions:
     '76.0':
@@ -46,6 +46,8 @@ firefox:
       image: selenoid/vnc:firefox_84.0
     '85.0':
       image: selenoid/vnc:firefox_85.0
+    '86.0':
+      image: selenoid/vnc:firefox_86.0
 opera:
   defaultVersion: "74.0"
   path: "/"
@@ -70,3 +72,13 @@ opera:
       image: selenoid/vnc:opera_73.0
     '74.0':
       image: selenoid/vnc:opera_74.0
+MicrosoftEdge:
+  defaultVersion: "90.0"
+  path: "/"
+  versions:
+    '88.0':
+      image: browsers/edge:88.0
+    '89.0':
+      image: browsers/edge:89.0
+    '90.0':
+      image: browsers/edge:90.0
