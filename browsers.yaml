@@ -1,6 +1,8 @@
 chrome:
   defaultVersion: "89.0"
   path: "/"
+  kernelCaps:
+  - SYS_ADMIN
   versions:
     '79.0':
       image: selenoid/vnc:chrome_79.0
@@ -23,8 +25,10 @@ chrome:
     '89.0':
       image: selenoid/vnc:chrome_89.0
 firefox:
-  defaultVersion: "86.0"
+  defaultVersion: "87.0"
   path: "/wd/hub"
+  kernelCaps:
+  - SYS_ADMIN
   versions:
     '76.0':
       image: selenoid/vnc:firefox_76.0
@@ -48,9 +52,13 @@ firefox:
       image: selenoid/vnc:firefox_85.0
     '86.0':
       image: selenoid/vnc:firefox_86.0
+    '87.0':
+      image: selenoid/vnc:firefox_87.0
 opera:
-  defaultVersion: "74.0"
+  defaultVersion: "75.0"
   path: "/"
+  kernelCaps:
+  - SYS_ADMIN
   versions:
     '65.0':
       image: selenoid/vnc:opera_65.0
@@ -72,9 +80,13 @@ opera:
       image: selenoid/vnc:opera_73.0
     '74.0':
       image: selenoid/vnc:opera_74.0
+    '75.0':
+      image: selenoid/vnc:opera_75.0
 MicrosoftEdge:
-  defaultVersion: "90.0"
+  defaultVersion: "91.0"
   path: "/"
+  kernelCaps:
+  - SYS_ADMIN
   versions:
     '88.0':
       image: browsers/edge:88.0
@@ -82,3 +94,5 @@ MicrosoftEdge:
       image: browsers/edge:89.0
     '90.0':
       image: browsers/edge:90.0
+    '91.0':
+      image: browsers/edge:91.0

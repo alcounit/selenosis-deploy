@@ -16,6 +16,7 @@ spec:
     metadata:
       labels:
         app: selenoid-ui
+        selenosis.app.type: worker
       namespace: selenosis
     spec:
       containers:

@@ -17,11 +17,12 @@ spec:
     metadata:
       labels:
         app: selenosis
+        selenosis.app.type: worker
       namespace: selenosis
     spec:
       containers:
       - args: ["/selenosis", "--browsers-config", "./config/browsers.yaml", "--namespace", "selenosis", "--service-name", "seleniferous", "--browser-limit", "40", "--proxy-image", "alcounit/seleniferous:v0.0.3-develop"]
-        image: alcounit/selenosis:v1.0.0
+        image: alcounit/selenosis:v1.0.2
         name: selenosis
         ports:
         - containerPort: 4444
