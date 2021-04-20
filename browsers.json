@@ -1,6 +1,6 @@
 {
     "chrome": {
-        "defaultVersion": "89.0",
+        "defaultVersion": "90.0",
         "path": "/",
         "kernelCaps": ["SYS_ADMIN"],
         "versions": {
@@ -33,6 +33,9 @@
             },
             "89.0": {
                 "image": "selenoid/vnc:chrome_89.0"
+            },
+            "90.0": {
+                "image": "selenoid/vnc:chrome_90.0"
             }
         }
     },
@@ -117,7 +120,7 @@
         }
     },
     "MicrosoftEdge" : {
-        "defaultVersion": "90.0",
+        "defaultVersion": "91.0",
         "path": "/",
         "kernelCaps": ["SYS_ADMIN"],
         "versions": {

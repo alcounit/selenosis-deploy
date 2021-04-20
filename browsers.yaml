@@ -1,5 +1,5 @@
 chrome:
-  defaultVersion: "89.0"
+  defaultVersion: "90.0"
   path: "/"
   kernelCaps:
   - SYS_ADMIN
@@ -24,6 +24,8 @@ chrome:
       image: selenoid/vnc:chrome_88.0
     '89.0':
       image: selenoid/vnc:chrome_89.0
+    '90.0':
+      image: selenoid/vnc:chrome_90.0
 firefox:
   defaultVersion: "87.0"
   path: "/wd/hub"
