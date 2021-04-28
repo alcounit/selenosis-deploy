@@ -40,7 +40,7 @@
         }
     },
     "firefox": {
-        "defaultVersion": "87.0",
+        "defaultVersion": "88.0",
         "path": "/wd/hub",
         "kernelCaps": ["SYS_ADMIN"],
         "versions": {
@@ -76,6 +76,9 @@
             },
             "87.0": {
                 "image": "selenoid/vnc:firefox_87.0"
+            },
+            "88.0": {
+                "image": "selenoid/vnc:firefox_88.0"
             }
         }
     },

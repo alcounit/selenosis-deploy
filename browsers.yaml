@@ -27,7 +27,7 @@ chrome:
     '90.0':
       image: selenoid/vnc:chrome_90.0
 firefox:
-  defaultVersion: "87.0"
+  defaultVersion: "88.0"
   path: "/wd/hub"
   kernelCaps:
   - SYS_ADMIN
@@ -56,6 +56,8 @@ firefox:
       image: selenoid/vnc:firefox_86.0
     '87.0':
       image: selenoid/vnc:firefox_87.0
+    '88.0':
+      image: selenoid/vnc:firefox_88.0
 opera:
   defaultVersion: "75.0"
   path: "/"
