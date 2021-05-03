@@ -21,9 +21,16 @@ spec:
       namespace: selenosis
     spec:
       containers:
-      - args: ["/selenosis", "--browsers-config", "./config/browsers.yaml", "--namespace", "selenosis", "--service-name", "seleniferous", "--browser-limit", "40", "--proxy-image", "alcounit/seleniferous:v1.0.1"]
+      - args: ["/selenosis", "--browsers-config", "./config/browsers.yaml", "--namespace", "selenosis", "--service-name", "seleniferous", "--browser-limit", "10", "--proxy-image", "alcounit/seleniferous:v1.0.1"]
         image: alcounit/selenosis:v1.0.4
         name: selenosis
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "128Mi"
+          requests:
+            cpu: "0.2"
+            memory: "128Mi"
         ports:
         - containerPort: 4444
           name: selenium

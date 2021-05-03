@@ -24,6 +24,13 @@ spec:
           name: selenoid-ui
           imagePullPolicy: IfNotPresent
           image: aerokube/selenoid-ui:1.10.1
+          resources:
+            limits:
+              cpu: "0.25"
+              memory: "64Mi"
+            requests:
+              cpu: "0.05"
+              memory: "64Mi"          
           ports:
             - containerPort: 8080
               name: http
@@ -32,6 +39,13 @@ spec:
           name: selenoid-ui-adapter
           imagePullPolicy: IfNotPresent
           image: alcounit/adaptee:v0.0.2-develop
+          resources:
+            limits:
+              cpu: "0.25"
+              memory: "64Mi"
+            requests:
+              cpu: "0.05"
+              memory: "64Mi" 
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       terminationGracePeriodSeconds: 0
