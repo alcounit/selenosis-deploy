@@ -83,7 +83,7 @@
         }
     },
     "opera" : {
-        "defaultVersion": "75.0",
+        "defaultVersion": "76.0",
         "path": "/",
         "kernelCaps": ["SYS_ADMIN"],
         "versions": {
@@ -119,6 +119,9 @@
             },
             "75.0": {
                 "image": "selenoid/vnc:opera_75.0"
+            },
+            "76.0": {
+                "image": "selenoid/vnc:opera_76.0"
             }
         }
     },

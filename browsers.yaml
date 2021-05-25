@@ -59,7 +59,7 @@ firefox:
     '88.0':
       image: selenoid/vnc:firefox_88.0
 opera:
-  defaultVersion: "75.0"
+  defaultVersion: "76.0"
   path: "/"
   kernelCaps:
   - SYS_ADMIN
@@ -86,6 +86,8 @@ opera:
       image: selenoid/vnc:opera_74.0
     '75.0':
       image: selenoid/vnc:opera_75.0
+    '76.0':
+      image: selenoid/vnc:opera_76.0
 MicrosoftEdge:
   defaultVersion: "91.0"
   path: "/"

@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - args: ["/selenosis", "--browsers-config", "./config/browsers.yaml", "--namespace", "selenosis", "--service-name", "seleniferous", "--browser-limit", "10", "--proxy-image", "alcounit/seleniferous:v1.0.1"]
-        image: alcounit/selenosis:v1.0.4
+        image: alcounit/selenosis:v1.0.5
         name: selenosis
         resources:
           limits:
