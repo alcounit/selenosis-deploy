@@ -58,6 +58,11 @@ If you need UI for your tests perform command
  kubectl apply -f 04-selenoid-ui.yaml
  ```
 
+ ## Deploy selenosis hpa
+ ```bash
+ kubectl apply -f 05-selenosis-hpa.yaml
+ ```
+
   ### Check deployment status
  ```bash
 kubectl get po -n selenosis
