@@ -1,6 +1,6 @@
 {
     "chrome": {
-        "defaultVersion": "90.0",
+        "defaultVersion": "92.0",
         "path": "/",
         "kernelCaps": ["SYS_ADMIN"],
         "versions": {
@@ -36,11 +36,17 @@
             },
             "90.0": {
                 "image": "selenoid/vnc:chrome_90.0"
+            },
+            "91.0": {
+                "image": "selenoid/vnc:chrome_91.0"
+            },
+            "92.0": {
+                "image": "selenoid/vnc:chrome_92.0"
             }
         }
     },
     "firefox": {
-        "defaultVersion": "88.0",
+        "defaultVersion": "90.0",
         "path": "/wd/hub",
         "kernelCaps": ["SYS_ADMIN"],
         "versions": {
@@ -79,11 +85,17 @@
             },
             "88.0": {
                 "image": "selenoid/vnc:firefox_88.0"
+            },
+            "89.0": {
+                "image": "selenoid/vnc:firefox_89.0"
+            },
+            "90.0": {
+                "image": "selenoid/vnc:firefox_90.0"
             }
         }
     },
     "opera" : {
-        "defaultVersion": "76.0",
+        "defaultVersion": "77.0",
         "path": "/",
         "kernelCaps": ["SYS_ADMIN"],
         "versions": {
@@ -122,11 +134,14 @@
             },
             "76.0": {
                 "image": "selenoid/vnc:opera_76.0"
+            },
+            "77.0": {
+                "image": "selenoid/vnc:opera_77.0"
             }
         }
     },
     "MicrosoftEdge" : {
-        "defaultVersion": "91.0",
+        "defaultVersion": "93.0",
         "path": "/",
         "kernelCaps": ["SYS_ADMIN"],
         "versions": {
@@ -141,6 +156,12 @@
             },
             "91.0": {
                 "image": "browsers/edge:91.0"
+            },
+            "92.0": {
+                "image": "browsers/edge:92.0"
+            },
+            "93.0": {
+                "image": "browsers/edge:93.0"
             }
         }
     }
