@@ -1,87 +1,61 @@
-# selenosis-deploy
-selenosis kubernetes deployment
+# selenosis-deploy Helm chart
 
-## Clone deployment files
-``` bash
-git clone https://github.com/alcounit/selenosis-deploy.git && cd selenosis-deploy
+## Summary
+
+This chart deploys the full Selenosis stack:
+- **selenosis** — Selenium hub/proxy for creating sessions and routing traffic.
+- **browser-controller** — Kubernetes controller that reconciles `Browser` and `BrowserConfig` CRDs into Pods.
+- **browser-service** — REST + event stream API for managing `Browser` resources.
+- **browser-ui** — UI + VNC WebSocket proxy backed by browser-service.
+
+CRDs for `Browser` and `BrowserConfig` are shipped in `crds/` and installed automatically.
+Each service is configurable via Helm values that map to the environment variables described in the individual project READMEs.
+
+## Install and first deploy
+
+```sh
+git clone https://github.com/alcounit/selenosis-deploy.git
+cd selenosis-deploy
+helm upgrade --install selenosis . -n selenosis --create-namespace --wait
+helm status selenosis -n selenosis
 ```
 
-## Create namespace
-``` bash
- kubectl apply -f 01-namespace.yaml
+## BrowserConfig examples
+
+Examples are in `examples/`:
+- `browser-config-multisidecar.yaml` multi sidecar example.
+- `browser-config-singlesidecar.yaml` is a standalone example.
+
+```sh
+kubectl apply -n selenosis -f ./examples/browser-config-multisidecar.yaml
 ```
 
-## Create config map from config file
-Check https://github.com/alcounit/selenosis for config examples. Create your own config and create config map from it, config file can be YAML or JSON.
-``` bash
- kubectl create cm selenosis-config --from-file=browsers.json=browsers.json -n selenosis
+## Service types
+
+Each service supports `ClusterIP`, `NodePort`, or `LoadBalancer`.
+
+Example values:
+
+```yaml
+browserUI:
+  service:
+    type: NodePort
+    port: 8080
+    nodePort: 30080
+
+browserService:
+  service:
+    type: LoadBalancer
+    port: 8080
+
+selenosis:
+  service:
+    type: ClusterIP
+    port: 4444
 ```
-``` bash
- kubectl create cm selenosis-config --from-file=browsers.yaml=browsers.yaml -n selenosis
+
+Apply:
+
+```sh
+helm upgrade --install selenosis ./selenosis-deploy -n selenosis -f values.local.yaml
 ```
-
-## Create kubernetes service
-``` bash
- kubectl apply -f 02-service.yaml
- ```
-
-  ### Check service status
- ```bash
-kubectl get svc -n selenosis
-NAME            TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-seleniferous    ClusterIP      None           <none>        <none>           8h
-selenosis       LoadBalancer   10.43.201.60   <pending>     4444:31000/TCP   8h
- ```
-If external IP is not assigned for selenosis use kubernetes node as access point
-
-<b>selenosis:</b> <br/>
-http://<loadBalancerIP|nodeIP>:<4444|31000>/wd/hub
-
-
-
- ## Deploy selenosis
- ``` bash
- kubectl apply -f 03-selenosis.yaml
- ```
-
-   ### Check deployment status
- ```bash
-kubectl get po -n selenosis
-NAME                           READY   STATUS    RESTARTS   AGE
-selenosis-694c76f757-5m2ws     1/1     Running   0          132m
-selenosis-694c76f757-6bgwl     1/1     Running   0          132m
- ```
-
-If you need UI for your tests perform command
-## Deploy selenoid-ui
- ``` bash
- kubectl apply -f 04-selenoid-ui.yaml
- ```
-
- ## Deploy selenosis hpa
- ```bash
- kubectl apply -f 05-selenosis-hpa.yaml
- ```
-
-  ### Check deployment status
- ```bash
-kubectl get po -n selenosis
-NAME                           READY   STATUS    RESTARTS   AGE
-selenoid-ui-5bcc66c78d-dj7z7   2/2     Running   0          18m
-selenosis-694c76f757-5m2ws     1/1     Running   0          132m
-selenosis-694c76f757-6bgwl     1/1     Running   0          132m
- ```
-
-  ### Check service status
- ```bash
-kubectl get svc -n selenosis
-NAME            TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
-selenoid-ui     LoadBalancer   10.43.48.95    <pending>     8080:32000/TCP   8h
-seleniferous    ClusterIP      None           <none>        <none>           8h
-selenosis       LoadBalancer   10.43.201.60   <pending>     4444:31000/TCP   8h
- ```
-
-If external IP is not assigned for selenoid-ui use kubernetes node as access point
- 
-<b>selenoid-ui:</b> <br/>
-http://<loadBalancerIP|nodeIP>:<8080|32000>/

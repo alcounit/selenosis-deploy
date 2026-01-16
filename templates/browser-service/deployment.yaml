@@ -1,0 +1,38 @@
+{{- if .Values.browserService.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-service") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-service
+spec:
+  replicas: {{ .Values.browserService.replicas }}
+  selector:
+    matchLabels:
+      {{- include "selenosis-deploy.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: browser-service
+  template:
+    metadata:
+      labels:
+        {{- include "selenosis-deploy.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: browser-service
+    spec:
+      serviceAccountName: {{ default (include "selenosis-deploy.componentName" (dict "root" . "component" "browser-service")) .Values.browserService.serviceAccount.name }}
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: browser-service
+        image: {{ .Values.browserService.image }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        args:
+          - "--listen={{ .Values.browserService.listenAddr }}"
+        ports:
+          - name: http
+            containerPort: {{ .Values.browserService.service.port }}
+        resources:
+          {{- toYaml .Values.browserService.resources | nindent 10 }}
+{{- end -}}

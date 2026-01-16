@@ -1,0 +1,6 @@
+apiVersion: v2
+name: selenosis-deploy
+description: Helm chart to deploy Selenosis services (browser-controller, browser-service, selenosis, browser-ui)
+type: application
+version: 0.1.0
+appVersion: "develop"

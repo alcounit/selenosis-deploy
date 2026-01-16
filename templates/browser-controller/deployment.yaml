@@ -1,0 +1,54 @@
+{{- if .Values.browserController.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-controller") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-controller
+spec:
+  replicas: {{ .Values.browserController.replicas }}
+  selector:
+    matchLabels:
+      {{- include "selenosis-deploy.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: browser-controller
+  template:
+    metadata:
+      labels:
+        {{- include "selenosis-deploy.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: browser-controller
+    spec:
+      serviceAccountName: {{ default (include "selenosis-deploy.componentName" (dict "root" . "component" "browser-controller")) .Values.browserController.serviceAccount.name }}
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: manager
+        image: {{ .Values.browserController.image }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        args:
+          - "--metrics-addr={{ .Values.browserController.metricsAddr }}"
+          - "--health-probe-bind-address={{ .Values.browserController.healthProbeBindAddress }}"
+          - "--enable-leader-election={{ .Values.browserController.leaderElection }}"
+        ports:
+          - name: metrics
+            containerPort: 8080
+          - name: health
+            containerPort: 8081
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          {{- toYaml .Values.browserController.resources | nindent 10 }}
+{{- end -}}

@@ -1,0 +1,50 @@
+{{- if .Values.selenosis.enabled -}}
+{{- $browserServiceName := include "selenosis-deploy.componentName" (dict "root" . "component" "browser-service") -}}
+{{- $browserServiceURL := .Values.selenosis.browserServiceURL | default (printf "http://%s:%d" $browserServiceName (int .Values.browserService.service.port)) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "selenosis") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: selenosis
+spec:
+  replicas: {{ .Values.selenosis.replicas }}
+  selector:
+    matchLabels:
+      {{- include "selenosis-deploy.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: selenosis
+  template:
+    metadata:
+      labels:
+        {{- include "selenosis-deploy.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: selenosis
+    spec:
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: selenosis
+        image: {{ .Values.selenosis.image }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        ports:
+          - name: http
+            containerPort: {{ .Values.selenosis.service.port }}
+        env:
+          - name: LISTEN_ADDR
+            value: {{ .Values.selenosis.listenAddr | quote }}
+          - name: BROWSER_SERVICE_URL
+            value: {{ $browserServiceURL | quote }}
+          - name: PROXY_PORT
+            value: {{ .Values.selenosis.proxyPort | quote }}
+          - name: NAMESPACE
+            value: {{ default .Release.Namespace .Values.selenosis.namespace | quote }}
+          - name: SESSION_CREATE_ATTEMPTS
+            value: {{ .Values.selenosis.sessionCreateAttempts | quote }}
+          - name: SESSION_CREATE_TIMEOUT
+            value: {{ .Values.selenosis.sessionCreateTimeout | quote }}
+        resources:
+          {{- toYaml .Values.selenosis.resources | nindent 10 }}
+{{- end -}}

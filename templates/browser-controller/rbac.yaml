@@ -1,0 +1,91 @@
+{{- if and .Values.browserController.enabled .Values.browserController.serviceAccount.create -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ default (include "selenosis-deploy.componentName" (dict "root" . "component" "browser-controller")) .Values.browserController.serviceAccount.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-controller
+{{- end }}
+{{ if and .Values.browserController.enabled .Values.browserController.rbac.create }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-controller") }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-controller
+rules:
+- apiGroups:
+  - selenosis.io
+  resources:
+  - browsers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - selenosis.io
+  resources:
+  - browserconfigs
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - selenosis.io
+  resources:
+  - browsers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - selenosis.io
+  resources:
+  - browserconfigs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - selenosis.io
+  resources:
+  - browsers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-controller") }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-controller") }}
+subjects:
+- kind: ServiceAccount
+  name: {{ default (include "selenosis-deploy.componentName" (dict "root" . "component" "browser-controller")) .Values.browserController.serviceAccount.name }}
+  namespace: {{ .Release.Namespace }}
+{{- end -}}

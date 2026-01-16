@@ -1,0 +1,48 @@
+{{- if .Values.browserUI.enabled -}}
+{{- $browserServiceName := include "selenosis-deploy.componentName" (dict "root" . "component" "browser-service") -}}
+{{- $browserServiceURL := .Values.browserUI.browserServiceURL | default (printf "http://%s:%d" $browserServiceName (int .Values.browserService.service.port)) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-ui") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-ui
+spec:
+  replicas: {{ .Values.browserUI.replicas }}
+  selector:
+    matchLabels:
+      {{- include "selenosis-deploy.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: browser-ui
+  template:
+    metadata:
+      labels:
+        {{- include "selenosis-deploy.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: browser-ui
+    spec:
+      {{- if .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: browser-ui
+        image: {{ .Values.browserUI.image }}
+        imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+        ports:
+          - name: http
+            containerPort: {{ .Values.browserUI.service.port }}
+        env:
+          - name: LISTEN_ADDR
+            value: {{ .Values.browserUI.listenAddr | quote }}
+          - name: BROWSER_SERVICE_URL
+            value: {{ $browserServiceURL | quote }}
+          - name: BROWSER_NAMESPACE
+            value: {{ default .Release.Namespace .Values.browserUI.browserNamespace | quote }}
+          - name: VNC_PASSWORD
+            value: {{ .Values.browserUI.vncPassword | quote }}
+          - name: UI_STATIC_PATH
+            value: {{ .Values.browserUI.uiStaticPath | quote }}
+        resources:
+          {{- toYaml .Values.browserUI.resources | nindent 10 }}
+{{- end -}}
