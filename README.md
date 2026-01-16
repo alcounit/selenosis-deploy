@@ -57,5 +57,5 @@ selenosis:
 Apply:
 
 ```sh
-helm upgrade --install selenosis ./selenosis-deploy -n selenosis -f values.local.yaml
+helm upgrade --install selenosis . -n selenosis -f values.local.yaml
 ```
