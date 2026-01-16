@@ -1,0 +1,91 @@
+nameOverride: ""
+fullnameOverride: ""
+
+global:
+  imagePullPolicy: IfNotPresent
+  imagePullSecrets: []
+
+browserController:
+  enabled: true
+  image: alcounit/browser-controller:latest
+  replicas: 1
+  serviceAccount:
+    create: true
+    name: ""
+  rbac:
+    create: true
+  metricsAddr: ":8080"
+  healthProbeBindAddress: ":8081"
+  leaderElection: false
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "64Mi"
+    limits:
+      cpu: "500m"
+      memory: "128Mi"
+
+browserService:
+  enabled: true
+  image: alcounit/browser-service:latest
+  replicas: 1
+  serviceAccount:
+    create: true
+    name: ""
+  rbac:
+    create: true
+  service:
+    type: ClusterIP
+    port: 8080
+    nodePort: null
+  listenAddr: ":8080"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+
+selenosis:
+  enabled: true
+  image: alcounit/selenosis:latest
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 4444
+    nodePort: null
+  listenAddr: ":4444"
+  browserServiceURL: ""
+  proxyPort: "4445"
+  namespace: ""
+  sessionCreateAttempts: 5
+  sessionCreateTimeout: "3m"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "256Mi"
+
+browserUI:
+  enabled: true
+  image: alcounit/browser-ui:latest
+  replicas: 1
+  service:
+    type: ClusterIP
+    port: 8080
+    nodePort: null
+  listenAddr: ":8080"
+  browserServiceURL: ""
+  browserNamespace: ""
+  vncPassword: "secret"
+  uiStaticPath: "/app/static"
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "64Mi"
+    limits:
+      cpu: "500m"
+      memory: "256Mi"

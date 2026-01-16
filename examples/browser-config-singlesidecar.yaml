@@ -1,0 +1,51 @@
+apiVersion: selenosis.io/v1
+kind: BrowserConfig
+metadata:
+  name: chrome-config-singlesidecar
+spec:
+  template:
+    labels:
+      app: browser
+    env:
+    - name: SE_VNC_PASSWORD
+      value: selenoid
+
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
+
+    sidecars:
+    - name: seleniferous
+      image: "192.168.1.101:30000/seleniferous:latest"
+      imagePullPolicy: IfNotPresent
+      env:
+      - name: SESSION_CREATE_TIMEOUT
+        value: "10m"
+      - name: SESSION_IDLE_TIMEOUT
+        value: "10m"
+      - name: BROWSER_PATH
+        value: "/"
+      - name: BROWSER_PORT
+        value: "4444"
+      - name: DISPLAY
+        value: "127.0.0.1:0"
+      - name: POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+      resources:
+        limits:
+          cpu: "0.2"
+          memory: "128Mi"
+        requests:
+          cpu: "0.1"
+          memory: "64Mi"
+
+  browsers:
+    chrome:
+      "143.0":
+        image: 192.168.1.101:30000/standalone-chrome:143.0-20251212

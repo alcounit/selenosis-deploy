@@ -1,0 +1,218 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.18.0
+  name: browsers.selenosis.io
+spec:
+  group: selenosis.io
+  names:
+    kind: Browser
+    listKind: BrowserList
+    plural: browsers
+    shortNames:
+    - brw
+    singular: browser
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.browserName
+      name: Browser
+      type: string
+    - jsonPath: .spec.browserVersion
+      name: Version
+      type: string
+    - jsonPath: .status.phase
+      name: Phase
+      type: string
+    - jsonPath: .status.podIP
+      name: PodIP
+      type: string
+    - jsonPath: .status.startTime
+      name: StartTime
+      type: date
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1
+    schema:
+      openAPIV3Schema:
+        description: Browser is the Schema for the browsers API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BrowserSpec defines the desired state of BrowserPod
+            properties:
+              browserName:
+                description: BrowserName specifies the name of the browser to use
+                  (e.g., chrome, firefox)
+                minLength: 1
+                type: string
+              browserVersion:
+                description: BrowserVersion specifies the version of the browser to
+                  use (e.g., 91.0, 88.0)
+                minLength: 1
+                type: string
+            required:
+            - browserName
+            - browserVersion
+            type: object
+          status:
+            description: BrowserStatus defines the observed state of BrowserPod
+            properties:
+              containerStatuses:
+                description: ContainerStatuses provides detailed status information
+                  about each container
+                items:
+                  description: ContainerStatus represents the status of a container
+                  properties:
+                    image:
+                      description: Image is the image the container is running
+                      type: string
+                    name:
+                      description: Name of the container
+                      type: string
+                    ports:
+                      description: Ports exposed by the container
+                      items:
+                        description: ContainerPort represents a network port in a
+                          container
+                        properties:
+                          containerPort:
+                            description: Number of port to expose on the container
+                            format: int32
+                            maximum: 65535
+                            minimum: 1
+                            type: integer
+                          hostPort:
+                            description: Number of port to expose on the host
+                            format: int32
+                            maximum: 65535
+                            minimum: 1
+                            type: integer
+                          name:
+                            description: Name for the port that can be referred to
+                              by services
+                            type: string
+                          protocol:
+                            description: Protocol for port. Must be UDP, TCP, or SCTP
+                            type: string
+                        required:
+                        - containerPort
+                        type: object
+                      type: array
+                      x-kubernetes-list-type: atomic
+                    restartCount:
+                      description: RestartCount is the number of times the container
+                        has been restarted
+                      format: int32
+                      type: integer
+                    state:
+                      description: State holds details about the container's current
+                        condition
+                      properties:
+                        running:
+                          description: Details about a running container
+                          properties:
+                            startedAt:
+                              description: Time at which the container was last (re-)started
+                              format: date-time
+                              type: string
+                          type: object
+                        terminated:
+                          description: Details about a terminated container
+                          properties:
+                            containerID:
+                              description: Container's ID in the format '<type>://<container_id>'
+                              type: string
+                            exitCode:
+                              description: Exit status from the last termination of
+                                the container
+                              format: int32
+                              type: integer
+                            finishedAt:
+                              description: Time at which the container last terminated
+                              format: date-time
+                              type: string
+                            message:
+                              description: Message regarding the last termination
+                                of the container
+                              type: string
+                            reason:
+                              description: (brief) reason from the last termination
+                                of the container
+                              type: string
+                            signal:
+                              description: Signal from the last termination of the
+                                container
+                              format: int32
+                              type: integer
+                            startedAt:
+                              description: Time at which previous execution of the
+                                container started
+                              format: date-time
+                              type: string
+                          required:
+                          - exitCode
+                          type: object
+                        waiting:
+                          description: Details about a waiting container
+                          properties:
+                            message:
+                              description: Message regarding why the container is
+                                not yet running.
+                              type: string
+                            reason:
+                              description: (brief) reason the container is not yet
+                                running.
+                              type: string
+                          type: object
+                      type: object
+                  required:
+                  - name
+                  - restartCount
+                  type: object
+                type: array
+                x-kubernetes-list-type: atomic
+              message:
+                description: A human readable message indicating details about why
+                  the pod is in this condition.
+                type: string
+              phase:
+                description: Phase is the current lifecycle phase of the pod
+                type: string
+              podIP:
+                description: PodIP is the IP address allocated to the pod
+                type: string
+              reason:
+                description: |-
+                  A brief CamelCase message indicating details about why the pod is in this state.
+                  e.g. 'Evicted'
+                type: string
+              startTime:
+                description: StartTime is when the pod was started
+                format: date-time
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

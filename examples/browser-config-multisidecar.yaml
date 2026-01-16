@@ -1,0 +1,210 @@
+apiVersion: selenosis.io/v1
+kind: BrowserConfig
+metadata:
+  name: chrome-config-multisidecar
+  namespace: selenosis
+spec:
+  template:
+    labels:
+      app: browser
+    env:
+    - name: SCREEN_RESOLUTION
+      value: 1920x1080
+    - name: DISPLAY
+      value: "127.0.0.1:0"
+
+    workingDir: /home/user
+
+    securityContext:
+      runAsGroup: 4096
+      runAsUser: 4096
+
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
+
+    sidecars:
+    - name: seleniferous
+      image: "alcounit/seleniferous:latest"
+      env:
+      - name: SESSION_CREATE_TIMEOUT
+        value: "10m"
+      - name: SESSION_IDLE_TIMEOUT
+        value: "10m"
+      - name: BROWSER_PATH
+        value: "/"
+      - name: BROWSER_PORT
+        value: "4444"
+      - name: DISPLAY
+        value: "127.0.0.1:0"
+      - name: POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+      resources:
+        limits:
+          cpu: "0.2"
+          memory: "128Mi"
+        requests:
+          cpu: "0.1"
+          memory: "64Mi"
+      volumeMounts:
+      - mountPath: /dev/shm
+        name: dshm
+      - mountPath: /tmp
+        name: tmp
+      - mountPath: /etc/passwd
+        name: usergroup
+        subPath: passwd
+      - mountPath: /etc/group
+        name: usergroup
+        subPath: group
+      - mountPath: /home/user
+        name: home
+      - mountPath: /home/user/Downloads
+        name: downloads
+    - name: x-server
+      env:
+      - name: SCREEN_RESOLUTION
+        value: 1920x1080
+      - name: DISPLAY
+        value: "127.0.0.1:0"
+      image: quay.io/aerokube/xvfb:21.1-1
+      ports:
+      - containerPort: 6000
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      volumeMounts:
+      - mountPath: /dev/shm
+        name: dshm
+      - mountPath: /tmp
+        name: tmp
+      - mountPath: /etc/group
+        name: usergroup
+        subPath: group
+      - mountPath: /etc/passwd
+        name: usergroup
+        subPath: passwd
+      - mountPath: /home/user
+        name: home
+      - mountPath: /home/user/Downloads
+        name: downloads
+      workingDir: /home/user
+    - name: window-manager
+      env:
+      - name: DISPLAY
+        value: "127.0.0.1:0"
+      image: quay.io/aerokube/openbox:3.6.1-1
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      volumeMounts:
+      - mountPath: /dev/shm
+        name: dshm
+      - mountPath: /tmp
+        name: tmp
+      - mountPath: /etc/group
+        name: usergroup
+        subPath: group
+      - mountPath: /etc/passwd
+        name: usergroup
+        subPath: passwd
+      - mountPath: /home/user
+        name: home
+      - mountPath: /home/user/Downloads
+        name: downloads
+      workingDir: /home/user
+    - name: vnc-server
+      env:
+      - name: DISPLAY
+        value: "127.0.0.1:0"
+      image: quay.io/aerokube/x11vnc:0.9.16-1
+      ports:
+      - containerPort: 5900
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      volumeMounts:
+      - mountPath: /dev/shm
+        name: dshm
+      - mountPath: /tmp
+        name: tmp
+      - mountPath: /etc/group
+        name: usergroup
+        subPath: group
+      - mountPath: /etc/passwd
+        name: usergroup
+        subPath: passwd
+      - mountPath: /home/user
+        name: home
+      - mountPath: /home/user/Downloads
+        name: downloads
+      workingDir: /home/user
+
+    volumes:
+    - emptyDir:
+        medium: Memory
+      name: dshm
+    - emptyDir:
+        medium: Memory
+      name: tmp
+    - emptyDir:
+        medium: Memory
+      name: home
+    - emptyDir: {}
+      name: downloads
+    - configMap:
+        defaultMode: 420
+        name: usergroup
+      name: usergroup
+
+    volumeMounts:
+    - mountPath: /dev/shm
+      name: dshm
+    - mountPath: /tmp
+      name: tmp
+    - mountPath: /etc/group
+      name: usergroup
+      subPath: group
+    - mountPath: /etc/passwd
+      name: usergroup
+      subPath: passwd
+    - mountPath: /home/user
+      name: home
+    - mountPath: /home/user/Downloads
+      name: downloads
+
+  browsers:
+    chrome:
+      "139.0":
+        image: quay.io/browser/google-chrome-stable:139.0
+---
+apiVersion: v1
+data:
+  group: |
+    root:x:0:
+    user:x:4096:
+  passwd: |
+    root:x:0:0:root:/root:/bin/bash
+    user:x:4096:4096::/home/user:/usr/sbin/nologin
+kind: ConfigMap
+metadata:
+  name: usergroup
+  namespace: selenosis

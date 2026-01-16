@@ -1,0 +1,22 @@
+{{- if .Values.browserUI.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-ui") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-ui
+spec:
+  type: {{ .Values.browserUI.service.type }}
+  selector:
+    {{- include "selenosis-deploy.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-ui
+  ports:
+    - name: http
+      port: {{ .Values.browserUI.service.port }}
+      targetPort: {{ .Values.browserUI.service.port }}
+      {{- if .Values.browserUI.service.nodePort }}
+      nodePort: {{ .Values.browserUI.service.nodePort }}
+      {{- end }}
+{{- end -}}

@@ -1,0 +1,22 @@
+{{- if .Values.selenosis.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "selenosis") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: selenosis
+spec:
+  type: {{ .Values.selenosis.service.type }}
+  selector:
+    {{- include "selenosis-deploy.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: selenosis
+  ports:
+    - name: http
+      port: {{ .Values.selenosis.service.port }}
+      targetPort: {{ .Values.selenosis.service.port }}
+      {{- if .Values.selenosis.service.nodePort }}
+      nodePort: {{ .Values.selenosis.service.nodePort }}
+      {{- end }}
+{{- end -}}

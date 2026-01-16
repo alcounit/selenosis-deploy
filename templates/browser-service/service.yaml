@@ -1,0 +1,22 @@
+{{- if .Values.browserService.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-service") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-service
+spec:
+  type: {{ .Values.browserService.service.type }}
+  selector:
+    {{- include "selenosis-deploy.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-service
+  ports:
+    - name: http
+      port: {{ .Values.browserService.service.port }}
+      targetPort: {{ .Values.browserService.service.port }}
+      {{- if .Values.browserService.service.nodePort }}
+      nodePort: {{ .Values.browserService.service.nodePort }}
+      {{- end }}
+{{- end -}}
