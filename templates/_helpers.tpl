@@ -13,7 +13,7 @@
 {{- define "selenosis-deploy.componentName" -}}
 {{- $root := .root -}}
 {{- $component := .component -}}
-{{- printf "%s-%s" (include "selenosis-deploy.fullname" $root) $component | trunc 63 | trimSuffix "-" -}}
+{{- $component | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{- define "selenosis-deploy.labels" -}}
