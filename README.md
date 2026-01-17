@@ -1,5 +1,10 @@
 # selenosis-deploy Helm chart
 
+## Architecture
+
+![diagram](https://github.com/user-attachments/assets/c483699a-cf94-47a4-a2cf-448f21e39bf3)
+
+
 ## Summary
 
 This chart deploys the full Selenosis stack:
