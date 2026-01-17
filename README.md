@@ -27,6 +27,7 @@ Examples are in `examples/`:
 - `browser-config-singlesidecar.yaml` is a standalone example.
 
 ```sh
+helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
 kubectl apply -n selenosis -f ./examples/browser-config-multisidecar.yaml
 ```
 
