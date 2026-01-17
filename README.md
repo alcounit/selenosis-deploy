@@ -3,10 +3,10 @@
 ## Summary
 
 This chart deploys the full Selenosis stack:
-- **selenosis** — Selenium hub/proxy for creating sessions and routing traffic.
-- **browser-controller** — Kubernetes controller that reconciles `Browser` and `BrowserConfig` CRDs into Pods.
-- **browser-service** — REST + event stream API for managing `Browser` resources.
-- **browser-ui** — UI + VNC WebSocket proxy backed by browser-service.
+- [selenosis](selenosis) — Selenium hub/proxy for creating sessions and routing traffic.
+- [browser-controller](https://github.com/alcounit/browser-controller) — Kubernetes controller that reconciles `Browser` and `BrowserConfig` CRDs into Pods.
+- [browser-service](https://github.com/alcounit/browser-service) — REST + event stream API for managing `Browser` resources.
+- [browser-ui](https://github.com/alcounit/browser-ui) — UI + VNC WebSocket proxy backed by browser-service.
 
 CRDs for `Browser` and `BrowserConfig` are shipped in `crds/` and installed automatically.
 Each service is configurable via Helm values that map to the environment variables described in the individual project READMEs.
