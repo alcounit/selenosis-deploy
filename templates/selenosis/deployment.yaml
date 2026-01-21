@@ -45,6 +45,17 @@ spec:
             value: {{ .Values.selenosis.sessionCreateAttempts | quote }}
           - name: SESSION_CREATE_TIMEOUT
             value: {{ .Values.selenosis.sessionCreateTimeout | quote }}
+          {{- if .Values.selenosis.env }}
+          {{- toYaml .Values.selenosis.env | nindent 10 }}
+          {{- end }}
+        {{- if .Values.selenosis.volumeMounts }}
+        volumeMounts:
+          {{- toYaml .Values.selenosis.volumeMounts | nindent 10 }}
+        {{- end }}
         resources:
           {{- toYaml .Values.selenosis.resources | nindent 10 }}
+      {{- if .Values.selenosis.volumes }}
+      volumes:
+        {{- toYaml .Values.selenosis.volumes | nindent 8 }}
+      {{- end }}
 {{- end -}}
