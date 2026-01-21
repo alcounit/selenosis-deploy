@@ -51,6 +51,9 @@ selenosis:
   enabled: true
   image: alcounit/selenosis:latest
   replicas: 1
+  env: []
+  volumeMounts: []
+  volumes: []
   service:
     type: ClusterIP
     port: 4444
