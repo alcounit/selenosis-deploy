@@ -30,6 +30,8 @@ helm status selenosis -n selenosis
 Examples are in `examples/`:
 - [browser-config-multisidecar.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browser-config-multisidecar.yaml) multi sidecar example.
 - [browser-config-singlesidecar.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browser-config-singlesidecar.yaml) is a standalone example.
+- [playwright-config-multisidecar.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/playwright-config-multisidecar.yaml) is a standalone example.
+
 
 ```sh
 helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
