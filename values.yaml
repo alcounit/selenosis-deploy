@@ -7,7 +7,7 @@ global:
 
 browserController:
   enabled: true
-  image: alcounit/browser-controller:latest
+  image: alcounit/browser-controller:v0.0.5
   replicas: 1
   serviceAccount:
     create: true
@@ -27,7 +27,7 @@ browserController:
 
 browserService:
   enabled: true
-  image: alcounit/browser-service:latest
+  image: alcounit/browser-service:v0.0.4
   replicas: 1
   serviceAccount:
     create: true
@@ -49,7 +49,7 @@ browserService:
 
 selenosis:
   enabled: true
-  image: alcounit/selenosis:latest
+  image: alcounit/selenosis:v2.0.4
   replicas: 1
   env: []
   volumeMounts: []
@@ -74,7 +74,7 @@ selenosis:
 
 browserUI:
   enabled: true
-  image: alcounit/browser-ui:latest
+  image: alcounit/browser-ui:v0.0.4
   replicas: 1
   service:
     type: ClusterIP
