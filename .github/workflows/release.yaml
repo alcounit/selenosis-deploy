@@ -47,17 +47,37 @@ jobs:
 
       - name: Update Helm Repository Index
         run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-          # Clone gh-pages branch
-          git clone --single-branch --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages || git clone "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
+          # Try to clone gh-pages branch, or create it if it doesn't exist
+          if git clone --single-branch --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages 2>/dev/null; then
+            echo "gh-pages branch exists, updating..."
+          else
+            echo "gh-pages branch doesn't exist, creating..."
+            mkdir gh-pages
+            cd gh-pages
+            git init
+            git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+            git checkout -b gh-pages
+            cd ..
+          fi
 
           cd gh-pages
 
+          # Configure git
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
           # Create or update index
-          helm repo index . --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}" --merge index.yaml || helm repo index . --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}"
+          if [ -f index.yaml ]; then
+            helm repo index . --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}" --merge index.yaml
+          else
+            helm repo index . --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}"
+          fi
 
           # Commit and push if there are changes
           git add index.yaml
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Helm repository index for ${{ github.ref_name }}" && git push)
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            git commit -m "Update Helm repository index for ${{ github.ref_name }}"
+            git push -u origin gh-pages
+          else
+            echo "No changes to index.yaml"
+          fi
