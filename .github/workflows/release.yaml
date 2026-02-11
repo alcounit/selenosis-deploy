@@ -60,6 +60,9 @@ jobs:
             cd ..
           fi
 
+          # Copy the packaged chart to gh-pages directory
+          cp ${{ env.CHART_PACKAGE }} gh-pages/
+
           cd gh-pages
 
           # Configure git
@@ -67,17 +70,19 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
           # Create or update index
+          # Charts are served from GitHub Pages
+          REPO_URL="https://$(echo ${{ github.repository }} | cut -d'/' -f1).github.io/$(echo ${{ github.repository }} | cut -d'/' -f2)"
           if [ -f index.yaml ]; then
-            helm repo index . --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}" --merge index.yaml
+            helm repo index . --url "$REPO_URL" --merge index.yaml
           else
-            helm repo index . --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}"
+            helm repo index . --url "$REPO_URL"
           fi
 
           # Commit and push if there are changes
-          git add index.yaml
+          git add .
           if ! git diff --quiet || ! git diff --staged --quiet; then
-            git commit -m "Update Helm repository index for ${{ github.ref_name }}"
+            git commit -m "Update Helm repository for ${{ github.ref_name }}"
             git push -u origin gh-pages
           else
-            echo "No changes to index.yaml"
+            echo "No changes to commit"
           fi
