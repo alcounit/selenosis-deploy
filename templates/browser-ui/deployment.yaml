@@ -25,6 +25,22 @@ spec:
       imagePullSecrets:
         {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
       {{- end }}
+
+      {{- with (.Values.browserUI.nodeSelector | default .Values.common.nodeSelector) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with (.Values.browserUI.tolerations | default .Values.common.tolerations) }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with (.Values.browserUI.affinity | default .Values.common.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
       - name: browser-ui
         image: {{ .Values.browserUI.image }}

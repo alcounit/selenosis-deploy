@@ -24,6 +24,22 @@ spec:
       imagePullSecrets:
         {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
       {{- end }}
+
+      {{- with (.Values.browserController.nodeSelector | default .Values.common.nodeSelector) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with (.Values.browserController.tolerations | default .Values.common.tolerations) }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with (.Values.browserController.affinity | default .Values.common.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
       - name: manager
         image: {{ .Values.browserController.image }}

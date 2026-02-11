@@ -25,6 +25,22 @@ spec:
       imagePullSecrets:
         {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
       {{- end }}
+
+      {{- with (.Values.selenosis.nodeSelector | default .Values.common.nodeSelector) }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with (.Values.selenosis.tolerations | default .Values.common.tolerations) }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
+      {{- with (.Values.selenosis.affinity | default .Values.common.affinity) }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
       containers:
       - name: selenosis
         image: {{ .Values.selenosis.image }}
