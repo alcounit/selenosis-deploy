@@ -4,8 +4,6 @@ fullnameOverride: ""
 global:
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
-
-common:
   nodeSelector: {}
   tolerations: []
   affinity: {}

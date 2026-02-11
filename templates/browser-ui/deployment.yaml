@@ -26,17 +26,17 @@ spec:
         {{- toYaml .Values.global.imagePullSecrets | nindent 8 }}
       {{- end }}
 
-      {{- with (.Values.browserUI.nodeSelector | default .Values.common.nodeSelector) }}
+      {{- with (.Values.browserUI.nodeSelector | default .Values.global.nodeSelector) }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with (.Values.browserUI.tolerations | default .Values.common.tolerations) }}
+      {{- with (.Values.browserUI.tolerations | default .Values.global.tolerations) }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
 
-      {{- with (.Values.browserUI.affinity | default .Values.common.affinity) }}
+      {{- with (.Values.browserUI.affinity | default .Values.global.affinity) }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
