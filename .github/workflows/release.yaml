@@ -31,11 +31,33 @@ jobs:
       - name: Lint Chart
         run: helm lint .
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.6.0
-        with:
-          charts_dir: .
-          skip_packaging: false
+      - name: Package Chart
+        run: |
+          helm package . --destination .
+          echo "CHART_PACKAGE=$(ls selenosis-deploy-*.tgz)" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
         env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_SKIP_EXISTING: true
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            "${{ env.CHART_PACKAGE }}" \
+            --title "Release ${{ github.ref_name }}" \
+            --generate-notes
+
+      - name: Update Helm Repository Index
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+          # Clone gh-pages branch
+          git clone --single-branch --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages || git clone "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
+
+          cd gh-pages
+
+          # Create or update index
+          helm repo index . --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}" --merge index.yaml || helm repo index . --url "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}"
+
+          # Commit and push if there are changes
+          git add index.yaml
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update Helm repository index for ${{ github.ref_name }}" && git push)
