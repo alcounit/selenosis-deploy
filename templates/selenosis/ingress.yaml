@@ -1,0 +1,41 @@
+{{- if .Values.selenosis.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "selenosis") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: selenosis
+  {{- with .Values.selenosis.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.selenosis.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+
+  {{- if .Values.selenosis.ingress.tls }}
+  tls:
+    {{- if kindIs "slice" .Values.selenosis.ingress.tls }}
+    {{- toYaml .Values.selenosis.ingress.tls | nindent 4 }}
+    {{- else }}
+    - secretName: {{ .Values.selenosis.ingress.tls.secretName }}
+      hosts:
+        - {{ .Values.selenosis.ingress.host }}
+    {{- end }}
+  {{- end }}
+
+  rules:
+  - host: {{ .Values.selenosis.ingress.host | quote }}
+    http:
+      paths:
+      - path: {{ .Values.selenosis.ingress.path | default "/" }}
+        pathType: {{ .Values.selenosis.ingress.pathType | default "Prefix" }}
+        backend:
+          service:
+            name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "selenosis") }}
+            port:
+              number: {{ .Values.selenosis.service.port }}
+{{- end }}

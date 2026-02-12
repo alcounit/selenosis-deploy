@@ -4,6 +4,9 @@ fullnameOverride: ""
 global:
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 browserController:
   enabled: true
@@ -24,6 +27,10 @@ browserController:
     limits:
       cpu: "500m"
       memory: "128Mi"
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 browserService:
   enabled: true
@@ -46,6 +53,10 @@ browserService:
     limits:
       cpu: "500m"
       memory: "256Mi"
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 selenosis:
   enabled: true
@@ -72,6 +83,23 @@ selenosis:
       cpu: "500m"
       memory: "256Mi"
 
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  ingress:
+    enabled: false
+    className: "nginx"
+    host: "selenosis.example.com"
+    path: "/"
+    pathType: Prefix
+    annotations: {}
+    #   nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    #   nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    #   cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+    tls: {}
+
 browserUI:
   enabled: true
   image: alcounit/browser-ui:v0.0.4
@@ -92,3 +120,23 @@ browserUI:
     limits:
       cpu: "500m"
       memory: "256Mi"
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  ingress:
+    enabled: false
+    className: "nginx"
+    host: "ui.example.com"
+    path: "/"
+    pathType: Prefix
+    # CRITICAL: WebSocket annotations required for VNC proxy
+    annotations: {}
+    # Example annotations for NGINX (WebSocket support):
+    # annotations:
+    #   nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    #   nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    #   nginx.ingress.kubernetes.io/websocket-services: "browser-ui"
+    #   cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    tls: {}
