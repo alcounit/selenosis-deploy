@@ -1,0 +1,15 @@
+apiVersion: v1
+entries:
+  selenosis-deploy:
+  - apiVersion: v2
+    appVersion: develop
+    created: "2026-02-12T02:35:27.010160775Z"
+    description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
+      selenosis, browser-ui)
+    digest: 0652f5c5e17e06d7e2c550d97783a32ea6de55dc51f3a9b502794fac30b6866b
+    name: selenosis-deploy
+    type: application
+    urls:
+    - https://alcounit.github.io/selenosis-deploy/selenosis-deploy-2.0.3.tgz
+    version: 2.0.3
+generated: "2026-02-12T02:35:27.004863914Z"
