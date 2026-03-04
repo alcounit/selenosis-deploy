@@ -1,0 +1,41 @@
+{{- if .Values.browserUI.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-ui") }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "selenosis-deploy.labels" . | nindent 4 }}
+    app.kubernetes.io/component: browser-ui
+  {{- with .Values.browserUI.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.browserUI.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+
+  {{- if .Values.browserUI.ingress.tls }}
+  tls:
+    {{- if kindIs "slice" .Values.browserUI.ingress.tls }}
+    {{- toYaml .Values.browserUI.ingress.tls | nindent 4 }}
+    {{- else }}
+    - secretName: {{ .Values.browserUI.ingress.tls.secretName }}
+      hosts:
+        - {{ .Values.browserUI.ingress.host }}
+    {{- end }}
+  {{- end }}
+
+  rules:
+  - host: {{ .Values.browserUI.ingress.host | quote }}
+    http:
+      paths:
+      - path: {{ .Values.browserUI.ingress.path | default "/" }}
+        pathType: {{ .Values.browserUI.ingress.pathType | default "Prefix" }}
+        backend:
+          service:
+            name: {{ include "selenosis-deploy.componentName" (dict "root" . "component" "browser-ui") }}
+            port:
+              number: {{ .Values.browserUI.service.port }}
+{{- end }}

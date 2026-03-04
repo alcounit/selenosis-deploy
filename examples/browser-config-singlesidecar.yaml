@@ -20,7 +20,7 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "192.168.1.101:30000/seleniferous:latest"
+      image: "192.168.1.101:30000/seleniferous:v2.0.3"
       imagePullPolicy: IfNotPresent
       env:
       - name: SESSION_CREATE_TIMEOUT

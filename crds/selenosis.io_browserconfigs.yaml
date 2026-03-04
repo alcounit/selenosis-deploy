@@ -1200,6 +1200,10 @@ spec:
                       image:
                         description: Image is the browser container image.
                         type: string
+                      imagePullPolicy:
+                        description: PullPolicy describes a policy for if/when to
+                          pull a container image
+                        type: string
                       imagePullSecrets:
                         items:
                           description: |-
@@ -5415,6 +5419,9 @@ spec:
                       - ip
                       type: object
                     type: array
+                  imagePullPolicy:
+                    description: ImagePullPolicy defines container image pull policy
+                    type: string
                   imagePullSecrets:
                     description: ImagePullSecrets specifies secrets for pulling private
                       images.

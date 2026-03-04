@@ -1,0 +1,88 @@
+name: Release Helm Chart
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Lint Chart
+        run: helm lint .
+
+      - name: Package Chart
+        run: |
+          helm package . --destination .
+          echo "CHART_PACKAGE=$(ls selenosis-deploy-*.tgz)" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            "${{ env.CHART_PACKAGE }}" \
+            --title "Release ${{ github.ref_name }}" \
+            --generate-notes
+
+      - name: Update Helm Repository Index
+        run: |
+          # Try to clone gh-pages branch, or create it if it doesn't exist
+          if git clone --single-branch --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages 2>/dev/null; then
+            echo "gh-pages branch exists, updating..."
+          else
+            echo "gh-pages branch doesn't exist, creating..."
+            mkdir gh-pages
+            cd gh-pages
+            git init
+            git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+            git checkout -b gh-pages
+            cd ..
+          fi
+
+          # Copy the packaged chart to gh-pages directory
+          cp ${{ env.CHART_PACKAGE }} gh-pages/
+
+          cd gh-pages
+
+          # Configure git
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+          # Create or update index
+          # Charts are served from GitHub Pages
+          REPO_URL="https://$(echo ${{ github.repository }} | cut -d'/' -f1).github.io/$(echo ${{ github.repository }} | cut -d'/' -f2)"
+          if [ -f index.yaml ]; then
+            helm repo index . --url "$REPO_URL" --merge index.yaml
+          else
+            helm repo index . --url "$REPO_URL"
+          fi
+
+          # Commit and push if there are changes
+          git add .
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            git commit -m "Update Helm repository for ${{ github.ref_name }}"
+            git push -u origin gh-pages
+          else
+            echo "No changes to commit"
+          fi
