@@ -46,16 +46,50 @@ helm status selenosis -n selenosis
 
 ## BrowserConfig examples
 
-Examples are in `examples/`:
-- [browser-config-multisidecar.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browser-config-multisidecar.yaml) multi sidecar example.
-- [browser-config-singlesidecar.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browser-config-singlesidecar.yaml) is a standalone example.
-- [playwright-config-multisidecar.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/playwright-config-multisidecar.yaml) multi sidecar example.
+Ready-to-use `BrowserConfig` manifests are in `examples/`. Apply any of them after deploying the chart:
 
+```sh
+kubectl apply -n selenosis -f ./examples/<filename>.yaml
+```
+
+### Selenoid (twilio/selenoid)
+
+Images from the Twilio-maintained Selenoid image family. VNC is built into the image and enabled via the `ENABLE_VNC=true` env var. Minimal two-container setup: browser + seleniferous sidecar.
+
+- [browserconfig-selenoid-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-chrome-example.yaml)
+- [browserconfig-selenoid-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-firefox-example.yaml)
 
 ```sh
 helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
-kubectl apply -n selenosis -f ./examples/browser-config-multisidecar.yaml
 ```
+
+### Selenium Standalone (selenium/standalone)
+
+Official Selenium project standalone images with a built-in VNC server. Password is configured via `SE_VNC_PASSWORD`. Minimal two-container setup: browser + seleniferous sidecar.
+
+- [browserconfig-selenium-standalone-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenium-standalone-chrome-example.yaml) 
+- [browserconfig-selenium-standalone-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenium-standalone-firefox-example.yaml)
+
+```sh
+helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="${se_vnc_password}"
+```
+
+### Moon (quay.io/browser)
+
+Images from Moon project, distributed via `quay.io/browser`. VNC requires a full X11 sidecar stack: `xvfb` (X server), `openbox` (window manager), and `x11vnc` (VNC server) — all from `quay.io/aerokube`. Also requires a `usergroup` ConfigMap (included in the manifests) to map the `user:4096` identity used by the browser containers.
+
+- [browserconfig-moon-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-chrome-example.yaml)
+- [browserconfig-moon-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-firefox-example.yaml)
+
+```sh
+helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
+```
+
+Playwright-specific Moon images for CDP/BiDi protocol sessions.
+
+- [browserconfig-moon-playwright-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-chrome-example.yaml)
+- [browserconfig-moon-playwright-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-firefox-example.yaml)
+
 
 ## Service types
 

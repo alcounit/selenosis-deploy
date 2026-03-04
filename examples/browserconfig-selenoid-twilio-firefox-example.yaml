@@ -1,14 +1,15 @@
-apiVersion: selenosis.io/v1
+apiVersion: browserconfig.selenosis.io/v1
 kind: BrowserConfig
 metadata:
-  name: chrome-config-singlesidecar
+  name: browserconfig-selenoid-twilio-firefox-example
+  namespace: selenosis
 spec:
   template:
     labels:
       app: browser
     env:
-    - name: SE_VNC_PASSWORD
-      value: selenoid
+    - name: ENABLE_VNC
+      value: "true"
 
     resources:
       requests:
@@ -20,19 +21,15 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "192.168.1.101:30000/seleniferous:v2.0.3"
+      image: "alcounit/seleniferous:v2.0.4"
       imagePullPolicy: IfNotPresent
       env:
       - name: SESSION_CREATE_TIMEOUT
         value: "10m"
       - name: SESSION_IDLE_TIMEOUT
         value: "10m"
-      - name: BROWSER_PATH
-        value: "/"
       - name: BROWSER_PORT
         value: "4444"
-      - name: DISPLAY
-        value: "127.0.0.1:0"
       - name: POD_IP
         valueFrom:
           fieldRef:
@@ -46,6 +43,6 @@ spec:
           memory: "64Mi"
 
   browsers:
-    chrome:
-      "143.0":
-        image: 192.168.1.101:30000/standalone-chrome:143.0-20251212
+    firefox:
+      "148.0":
+        image: twilio/selenoid:firefox_stable_148
