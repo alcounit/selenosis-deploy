@@ -18,7 +18,7 @@ metadata:
     {{- include "selenosis-deploy.labels" . | nindent 4 }}
     app.kubernetes.io/component: browser-service
 rules:
-- apiGroups: ["selenosis.io"]
+- apiGroups: ["browser.selenosis.io"]
   resources: ["browsers"]
   verbs: ["get", "list", "watch", "create", "delete", "update", "patch"]
 ---

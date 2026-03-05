@@ -19,47 +19,12 @@ metadata:
     app.kubernetes.io/component: browser-controller
 rules:
 - apiGroups:
-  - selenosis.io
+  - ""
   resources:
-  - browsers
+  - events
   verbs:
   - create
-  - delete
-  - get
-  - list
   - patch
-  - update
-  - watch
-- apiGroups:
-  - selenosis.io
-  resources:
-  - browserconfigs
-  verbs:
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - selenosis.io
-  resources:
-  - browsers/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - selenosis.io
-  resources:
-  - browserconfigs/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - selenosis.io
-  resources:
-  - browsers/status
-  verbs:
-  - get
-  - patch
-  - update
 - apiGroups:
   - ""
   resources:
@@ -73,12 +38,57 @@ rules:
   - update
   - watch
 - apiGroups:
-  - ""
+  - browser.selenosis.io
   resources:
-  - events
+  - browsers
   verbs:
   - create
+  - delete
+  - get
+  - list
   - patch
+  - update
+  - watch
+- apiGroups:
+  - browser.selenosis.io
+  resources:
+  - browsers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - browser.selenosis.io
+  resources:
+  - browsers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - browserconfig.selenosis.io
+  resources:
+  - browserconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - browserconfig.selenosis.io
+  resources:
+  - browserconfigs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - browserconfig.selenosis.io
+  resources:
+  - browserconfigs/status
+  verbs:
+  - get
+  - patch
+  - update
 - apiGroups:
   - coordination.k8s.io
   resources:

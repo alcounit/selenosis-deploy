@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.18.0
-  name: browserconfigs.selenosis.io
+  name: browserconfigs.browserconfig.selenosis.io
 spec:
-  group: selenosis.io
+  group: browserconfig.selenosis.io
   names:
     kind: BrowserConfig
     listKind: BrowserConfigList

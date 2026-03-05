@@ -1,0 +1,48 @@
+apiVersion: browserconfig.selenosis.io/v1
+kind: BrowserConfig
+metadata:
+  name: browserconfig-selenoid-twilio-firefox-example
+  namespace: selenosis
+spec:
+  template:
+    labels:
+      app: browser
+    env:
+    - name: ENABLE_VNC
+      value: "true"
+
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
+
+    sidecars:
+    - name: seleniferous
+      image: "alcounit/seleniferous:v2.0.5"
+      imagePullPolicy: IfNotPresent
+      env:
+      - name: SESSION_CREATE_TIMEOUT
+        value: "10m"
+      - name: SESSION_IDLE_TIMEOUT
+        value: "10m"
+      - name: BROWSER_PORT
+        value: "4444"
+      - name: POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+      resources:
+        limits:
+          cpu: "0.2"
+          memory: "128Mi"
+        requests:
+          cpu: "0.1"
+          memory: "64Mi"
+
+  browsers:
+    firefox:
+      "148.0":
+        image: twilio/selenoid:firefox_stable_148

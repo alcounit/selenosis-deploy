@@ -1,7 +1,7 @@
-apiVersion: selenosis.io/v1
+apiVersion: browserconfig.selenosis.io/v1
 kind: BrowserConfig
 metadata:
-  name: playwright-config
+  name: browserconfig-moon-chrome-example
   namespace: selenosis
 spec:
   template:
@@ -29,8 +29,7 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "alcounit/seleniferous:v2.0.3"
-      imagePullPolicy: Always
+      image: "alcounit/seleniferous:v2.0.5"
       env:
       - name: SESSION_CREATE_TIMEOUT
         value: "10m"
@@ -71,12 +70,40 @@ spec:
     - name: x-server
       env:
       - name: SCREEN_RESOLUTION
-        value: 1920x1080x24
+        value: 1920x1080
       - name: DISPLAY
         value: "127.0.0.1:0"
       image: quay.io/aerokube/xvfb:21.1-1
       ports:
       - containerPort: 6000
+      resources:
+        limits:
+          cpu: 200m
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      volumeMounts:
+      - mountPath: /dev/shm
+        name: dshm
+      - mountPath: /tmp
+        name: tmp
+      - mountPath: /etc/group
+        name: usergroup
+        subPath: group
+      - mountPath: /etc/passwd
+        name: usergroup
+        subPath: passwd
+      - mountPath: /home/user
+        name: home
+      - mountPath: /home/user/Downloads
+        name: downloads
+      workingDir: /home/user
+    - name: window-manager
+      env:
+      - name: DISPLAY
+        value: "127.0.0.1:0"
+      image: quay.io/aerokube/openbox:3.6.1-1
       resources:
         limits:
           cpu: 200m
@@ -165,9 +192,9 @@ spec:
       name: downloads
 
   browsers:
-    playwright-chrome:
-      "1.58.0":
-        image: quay.io/browser/playwright-chrome:playwright-1.58.0
+    chrome:
+      "145.0":
+        image: quay.io/browser/google-chrome-stable:145.0
 ---
 apiVersion: v1
 data:
