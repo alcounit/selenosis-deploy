@@ -56,8 +56,8 @@ kubectl apply -n selenosis -f ./examples/<filename>.yaml
 
 Images from the Twilio-maintained Selenoid image family. VNC is built into the image and enabled via the `ENABLE_VNC=true` env var. Minimal two-container setup: browser + seleniferous sidecar.
 
-- [browserconfig-selenoid-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-chrome-example.yaml)
-- [browserconfig-selenoid-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-firefox-example.yaml)
+- [browserconfig-selenoid-twilio-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-twilio-chrome-example.yaml)
+- [browserconfig-selenoid-twilio-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-twilio-firefox-example.yaml)
 
 ```sh
 helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
