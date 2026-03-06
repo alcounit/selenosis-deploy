@@ -1,3 +1,5 @@
+[![Helm Chart Version](https://img.shields.io/github/v/release/alcounit/selenosis-deploy?label=helm)](https://github.com/alcounit/selenosis-deploy/releases)
+
 # selenosis-deploy Helm chart
 
 ## Architecture
