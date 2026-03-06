@@ -102,7 +102,7 @@ selenosis:
 
 browserUI:
   enabled: true
-  image: alcounit/browser-ui:v0.0.5
+  image: alcounit/browser-ui:v0.0.6
   replicas: 1
   service:
     type: ClusterIP
@@ -140,3 +140,8 @@ browserUI:
     #   nginx.ingress.kubernetes.io/websocket-services: "browser-ui"
     #   cert-manager.io/cluster-issuer: "letsencrypt-prod"
     tls: {}
+
+
+crds:
+  enabled: true
+  keep: true

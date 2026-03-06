@@ -13,7 +13,7 @@ This chart deploys the full Selenosis stack:
 - [browser-service](https://github.com/alcounit/browser-service) — REST + event stream API for managing `Browser` resources.
 - [browser-ui](https://github.com/alcounit/browser-ui) — UI + VNC WebSocket proxy backed by browser-service.
 
-CRDs for `Browser` and `BrowserConfig` are shipped in `crds/` and installed automatically.
+CRDs for `Browser` and `BrowserConfig` are managed as Helm template resources (`templates/crds/`) and applied on every `helm install` and `helm upgrade`. Installation can be disabled with `--set crds.enabled=false` if you manage CRDs outside of Helm.
 Each service is configurable via Helm values that map to the environment variables described in the individual project READMEs.
 
 ## Installation
@@ -43,6 +43,30 @@ cd selenosis-deploy
 helm upgrade --install selenosis . -n selenosis --create-namespace --wait
 helm status selenosis -n selenosis
 ```
+
+## CRD Management
+
+CRDs are part of the chart templates and are controlled by the `crds` values block:
+
+```yaml
+crds:
+  enabled: true  # set to false to skip CRD installation
+  keep: true     # adds helm.sh/resource-policy: keep — CRDs are not deleted on helm uninstall
+```
+
+**Install without CRDs** (when CRDs are already applied or managed externally):
+
+```sh
+helm install selenosis selenosis/selenosis-deploy -n selenosis --create-namespace --set crds.enabled=false
+```
+
+**Upgrade without touching CRDs:**
+
+```sh
+helm upgrade selenosis selenosis/selenosis-deploy -n selenosis --set crds.enabled=false
+```
+
+> Unlike the legacy `crds/` directory approach, CRDs in templates are updated by `helm upgrade` when the schema changes. If you are upgrading from a previous chart version that used `crds/`, follow the [migration guide](https://github.com/alcounit/selenosis-deploy/releases).
 
 ## BrowserConfig examples
 
