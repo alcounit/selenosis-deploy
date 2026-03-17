@@ -29,7 +29,7 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "alcounit/seleniferous:v2.0.5"
+      image: "alcounit/seleniferous:v2.0.6"
       env:
       - name: SESSION_CREATE_TIMEOUT
         value: "10m"
@@ -192,10 +192,41 @@ spec:
       name: downloads
 
   browsers:
-    chrome:
-      "145.0":
-        image: quay.io/browser/google-chrome-stable:145.0
     firefox:
+      "130.0":
+        image: quay.io/browser/firefox-mozilla-build:130.0
+      "131.0":
+        image: quay.io/browser/firefox-mozilla-build:131.0
+      "132.0":
+        image: quay.io/browser/firefox-mozilla-build:132.0
+      "133.0":
+        image: quay.io/browser/firefox-mozilla-build:133.0
+      "134.0":
+        image: quay.io/browser/firefox-mozilla-build:134.0
+      "135.0":
+        image: quay.io/browser/firefox-mozilla-build:135.0
+      "136.0":
+        image: quay.io/browser/firefox-mozilla-build:136.0
+      "137.0":
+        image: quay.io/browser/firefox-mozilla-build:137.0
+      "138.0":
+        image: quay.io/browser/firefox-mozilla-build:138.0
+      "139.0":
+        image: quay.io/browser/firefox-mozilla-build:139.0
+      "141.0":
+        image: quay.io/browser/firefox-mozilla-build:141.0
+      "142.0":
+        image: quay.io/browser/firefox-mozilla-build:142.0
+      "143.0":
+        image: quay.io/browser/firefox-mozilla-build:143.0
+      "144.0":
+        image: quay.io/browser/firefox-mozilla-build:144.0
+      "145.0":
+        image: quay.io/browser/firefox-mozilla-build:145.0
+      "146.0":
+        image: quay.io/browser/firefox-mozilla-build:146.0
+      "147.0":
+        image: quay.io/browser/firefox-mozilla-build:147.0
       "148.0":
         image: quay.io/browser/firefox-mozilla-build:148.0
 ---

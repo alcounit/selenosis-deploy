@@ -21,8 +21,7 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "alcounit/seleniferous:v2.0.5"
-      imagePullPolicy: IfNotPresent
+      image: "alcounit/seleniferous:v2.0.6"
       env:
       - name: SESSION_CREATE_TIMEOUT
         value: "10m"

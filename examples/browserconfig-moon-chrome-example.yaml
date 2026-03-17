@@ -29,7 +29,7 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "alcounit/seleniferous:v2.0.5"
+      image: "alcounit/seleniferous:v2.0.6"
       env:
       - name: SESSION_CREATE_TIMEOUT
         value: "10m"
@@ -193,8 +193,38 @@ spec:
 
   browsers:
     chrome:
+      "131.0":
+        image: quay.io/browser/google-chrome-stable:131.0
+      "132.0":
+        image: quay.io/browser/google-chrome-stable:132.0
+      "133.0":
+        image: quay.io/browser/google-chrome-stable:133.0    
+      "134.0":
+        image: quay.io/browser/google-chrome-stable:134.0    
+      "135.0":
+        image: quay.io/browser/google-chrome-stable:135.0
+      "136.0":
+        image: quay.io/browser/google-chrome-stable:136.0
+      "137.0":
+        image: quay.io/browser/google-chrome-stable:137.0
+      "138.0":
+        image: quay.io/browser/google-chrome-stable:138.0 
+      "139.0":
+        image: quay.io/browser/google-chrome-stable:139.0
+      "140.0":
+        image: quay.io/browser/google-chrome-stable:140.0
+      "141.0":
+        image: quay.io/browser/google-chrome-stable:141.0    
+      "142.0":
+        image: quay.io/browser/google-chrome-stable:142.0    
+      "143.0":
+        image: quay.io/browser/google-chrome-stable:143.0
+      "144.0":
+        image: quay.io/browser/google-chrome-stable:144.0
       "145.0":
         image: quay.io/browser/google-chrome-stable:145.0
+      "146.0":
+        image: quay.io/browser/google-chrome-stable:146.0        
 ---
 apiVersion: v1
 data:
