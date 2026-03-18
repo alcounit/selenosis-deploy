@@ -2,6 +2,7 @@ apiVersion: browserconfig.selenosis.io/v1
 kind: BrowserConfig
 metadata:
   name: browserconfig-selenium-standalone-chrome-example
+  namespace: selenosis
 spec:
   template:
     labels:
