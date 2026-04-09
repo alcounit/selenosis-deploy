@@ -10,7 +10,7 @@ global:
 
 browserController:
   enabled: true
-  image: alcounit/browser-controller:v0.0.6
+  image: alcounit/browser-controller:v0.0.7
   replicas: 1
   serviceAccount:
     create: true
