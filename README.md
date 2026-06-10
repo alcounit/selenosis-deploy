@@ -116,6 +116,17 @@ Playwright-specific Moon images for CDP/BiDi protocol sessions.
 - [browserconfig-moon-playwright-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-chrome-example.yaml)
 - [browserconfig-moon-playwright-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-firefox-example.yaml)
 
+### Playwright Standalone (mcr.microsoft.com/playwright)
+
+Official Microsoft Playwright base image. Contains Chromium, Firefox, and WebKit browsers. The `playwright-core` npm module is installed via an init container since the base image only ships browser binaries. The `run-server` command starts a multi-browser WebSocket server — the client chooses which browser to launch at connect time. Minimal two-container setup: browser + seleniferous sidecar.
+
+- [browserconfig-playwright-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-example.yaml)
+
+### Playwright MCP (mcr.microsoft.com/playwright/mcp)
+
+Microsoft Playwright MCP server image. Exposes browser automation via MCP Streamable HTTP protocol. Lightweight image with a built-in MCP server — no init container needed. Minimal two-container setup: browser + seleniferous sidecar.
+
+- [browserconfig-playwright-mcp-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-mcp-chrome-example.yaml)
 
 ## Service types
 

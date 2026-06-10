@@ -1,0 +1,72 @@
+apiVersion: browserconfig.selenosis.io/v1
+kind: BrowserConfig
+metadata:
+  name: browserconfig-playwright-example
+  namespace: selenosis
+spec:
+  template:
+    labels:
+      app: browser
+
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "512Mi"
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
+
+    initContainers:
+    - name: install-playwright
+      image: mcr.microsoft.com/playwright:v1.59.1
+      command:
+      - "sh"
+      - "-c"
+      - "cd /opt/pw && npm init -y && npm install --no-save playwright-core@1.59.1"
+      volumeMounts:
+      - mountPath: /opt/pw
+        name: pw-modules
+
+    sidecars:
+    - name: seleniferous
+      image: "alcounit/seleniferous:v2.0.7"
+      env:
+      - name: SESSION_CREATE_TIMEOUT
+        value: "10m"
+      - name: SESSION_IDLE_TIMEOUT
+        value: "10m"
+      - name: BROWSER_PORT
+        value: "4444"
+      - name: POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+      resources:
+        limits:
+          cpu: "0.2"
+          memory: "128Mi"
+        requests:
+          cpu: "0.1"
+          memory: "64Mi"
+
+    volumes:
+    - emptyDir: {}
+      name: pw-modules
+    - emptyDir:
+        medium: Memory
+      name: dshm
+
+    volumeMounts:
+    - mountPath: /dev/shm
+      name: dshm
+    - mountPath: /opt/pw
+      name: pw-modules
+
+  browsers:
+    playwright-chromium:
+      "1.59.1":
+        image: mcr.microsoft.com/playwright:v1.59.1
+        command:
+        - "sh"
+        - "-c"
+        - "cd /opt/pw && exec ./node_modules/.bin/playwright-core run-server --port 4444 --host 0.0.0.0"
