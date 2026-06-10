@@ -126,7 +126,7 @@ Official Microsoft Playwright base image. Contains Chromium, Firefox, and WebKit
 
 Microsoft Playwright MCP server image. Exposes browser automation via MCP Streamable HTTP protocol. Lightweight image with a built-in MCP server — no init container needed. Minimal two-container setup: browser + seleniferous sidecar.
 
-- [browserconfig-playwright-mcp-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-mcp-chrome-example.yaml)
+- [browserconfig-playwright-mcp-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-mcp-example.yaml)
 
 ## Service types
 
