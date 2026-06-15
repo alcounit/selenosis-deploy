@@ -63,6 +63,9 @@ jobs:
           # Copy the packaged chart to gh-pages directory
           cp ${{ env.CHART_PACKAGE }} gh-pages/
 
+          # Copy Artifact Hub repository metadata (verified publisher) if present
+          cp artifacthub-repo.yml gh-pages/ 2>/dev/null || true
+
           cd gh-pages
 
           # Configure git

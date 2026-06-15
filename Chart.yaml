@@ -3,4 +3,37 @@ name: selenosis-deploy
 description: Helm chart to deploy Selenosis services (browser-controller, browser-service, selenosis, browser-ui)
 type: application
 version: 2.0.9
-appVersion: "develop"
+appVersion: "v2.0.8"
+home: https://github.com/alcounit/selenosis
+icon: https://raw.githubusercontent.com/alcounit/selenosis-deploy/main/logo.png
+sources:
+  - https://github.com/alcounit/selenosis-deploy
+  - https://github.com/alcounit/selenosis
+keywords:
+  - selenium
+  - playwright
+  - mcp
+  - webdriver
+  - browser-automation
+  - selenium-grid
+  - kubernetes
+  - e2e-testing
+maintainers:
+  - name: alcounit
+    email: alcounit@gmail.com
+annotations:
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/links: |
+    - name: source
+      url: https://github.com/alcounit/selenosis
+    - name: documentation
+      url: https://github.com/alcounit/selenosis#readme
+  artifacthub.io/images: |
+    - name: selenosis
+      image: alcounit/selenosis:v2.0.8
+    - name: browser-controller
+      image: alcounit/browser-controller:v0.0.8
+    - name: browser-service
+      image: alcounit/browser-service:v0.0.7
+    - name: browser-ui
+      image: alcounit/browser-ui:v0.0.7
