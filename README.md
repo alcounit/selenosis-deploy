@@ -1,138 +1,140 @@
+# selenosis-deploy
+
+**Helm chart that deploys the full [Selenosis](https://github.com/alcounit/selenosis) stack on Kubernetes** — CRDs, RBAC, all services, and ingress, in one command.
+
 [![Helm Chart Version](https://img.shields.io/github/v/release/alcounit/selenosis-deploy?label=helm)](https://github.com/alcounit/selenosis-deploy/releases)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/selenosis)](https://artifacthub.io/packages/search?repo=selenosis)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 
-# selenosis-deploy Helm chart
+---
 
-## Architecture
+## What it deploys
 
-![diagram](https://github.com/user-attachments/assets/c483699a-cf94-47a4-a2cf-448f21e39bf3)
+| Component | Role |
+| --- | --- |
+| **[selenosis](https://github.com/alcounit/selenosis)** | Stateless Selenium / Playwright / MCP hub. |
+| **[seleniferous](https://github.com/alcounit/seleniferous)** | Sidecar proxy inside each browser pod (added to pods via `BrowserConfig`). |
+| **[browser-controller](https://github.com/alcounit/browser-controller)** | Operator that reconciles `Browser` / `BrowserConfig` CRDs into pods. |
+| **[browser-service](https://github.com/alcounit/browser-service)** | REST + SSE facade over `Browser` resources. |
+| **[browser-ui](https://github.com/alcounit/browser-ui)** | Web dashboard with live sessions + VNC. |
 
+`Browser` and `BrowserConfig` CRDs ship as Helm templates (`templates/crds/`) and are
+applied on every `helm install`/`upgrade`. Each service is configured through Helm values
+that map to the environment variables documented in the individual project READMEs. For the
+architecture, see [selenosis → How it works](https://github.com/alcounit/selenosis#how-it-works).
 
-## Summary
+---
 
-This chart deploys the full Selenosis stack:
-- [selenosis](selenosis) — Selenium hub/proxy for creating sessions and routing traffic.
-- [browser-controller](https://github.com/alcounit/browser-controller) — Kubernetes controller that reconciles `Browser` and `BrowserConfig` CRDs into Pods.
-- [browser-service](https://github.com/alcounit/browser-service) — REST + event stream API for managing `Browser` resources.
-- [browser-ui](https://github.com/alcounit/browser-ui) — UI + VNC WebSocket proxy backed by browser-service.
+## Quick start
 
-CRDs for `Browser` and `BrowserConfig` are managed as Helm template resources (`templates/crds/`) and applied on every `helm install` and `helm upgrade`. Installation can be disabled with `--set crds.enabled=false` if you manage CRDs outside of Helm.
-Each service is configurable via Helm values that map to the environment variables described in the individual project READMEs.
-
-## Installation
-
-### From Helm Repository
-
-Add the Selenosis Helm repository:
-
-```sh
+```bash
+# 1. Add the Helm repository
 helm repo add selenosis https://alcounit.github.io/selenosis-deploy/
 helm repo update
-```
 
-Install the chart:
-
-```sh
+# 2. Install the full stack
 helm install selenosis selenosis/selenosis-deploy -n selenosis --create-namespace
+
+# 3. Apply a ready-made BrowserConfig (defines which browser images to run)
+kubectl apply -n selenosis \
+  -f https://raw.githubusercontent.com/alcounit/selenosis-deploy/main/examples/browserconfig-selenium-standalone-chrome-example.yaml
 ```
 
-### From Git Repository
+<details>
+<summary><b>Install from the git repository instead</b></summary>
 
-Clone and install directly:
-
-```sh
+```bash
 git clone https://github.com/alcounit/selenosis-deploy.git
 cd selenosis-deploy
 helm upgrade --install selenosis . -n selenosis --create-namespace --wait
 helm status selenosis -n selenosis
 ```
 
-## CRD Management
+</details>
 
-CRDs are part of the chart templates and are controlled by the `crds` values block:
+---
+
+## CRD management
+
+CRDs are part of the chart templates, controlled by the `crds` values block:
 
 ```yaml
 crds:
-  enabled: true  # set to false to skip CRD installation
-  keep: true     # adds helm.sh/resource-policy: keep — CRDs are not deleted on helm uninstall
+  enabled: true  # set to false to skip CRD installation (managed externally)
+  keep: true     # adds helm.sh/resource-policy: keep — CRDs survive `helm uninstall`
 ```
 
-**Install without CRDs** (when CRDs are already applied or managed externally):
-
-```sh
-helm install selenosis selenosis/selenosis-deploy -n selenosis --create-namespace --set crds.enabled=false
+```bash
+# Install / upgrade without touching CRDs
+helm upgrade --install selenosis selenosis/selenosis-deploy -n selenosis --set crds.enabled=false
 ```
 
-**Upgrade without touching CRDs:**
+> Because CRDs are templated (not in the legacy `crds/` directory), `helm upgrade` updates
+> them when the schema changes. Migrating from an older `crds/`-based chart? See the
+> [release notes](https://github.com/alcounit/selenosis-deploy/releases).
 
-```sh
-helm upgrade selenosis selenosis/selenosis-deploy -n selenosis --set crds.enabled=false
-```
-
-> Unlike the legacy `crds/` directory approach, CRDs in templates are updated by `helm upgrade` when the schema changes. If you are upgrading from a previous chart version that used `crds/`, follow the [migration guide](https://github.com/alcounit/selenosis-deploy/releases).
+---
 
 ## BrowserConfig examples
 
-Ready-to-use `BrowserConfig` manifests are in `examples/`. Apply any of them after deploying the chart:
+Ready-to-use `BrowserConfig` manifests live in [`examples/`](https://github.com/alcounit/selenosis-deploy/tree/main/examples). Apply any after deploying the chart:
 
-```sh
+```bash
 kubectl apply -n selenosis -f ./examples/<filename>.yaml
 ```
 
-### Selenoid (twilio/selenoid)
+<details>
+<summary><b>Per-image families: Selenoid, Selenium Standalone, Moon, Playwright, Playwright MCP</b></summary>
 
-Images from the Twilio-maintained Selenoid image family. VNC is built into the image and enabled via the `ENABLE_VNC=true` env var. Minimal two-container setup: browser + seleniferous sidecar.
-
-- [browserconfig-selenoid-twilio-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-twilio-chrome-example.yaml)
-- [browserconfig-selenoid-twilio-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-twilio-firefox-example.yaml)
-
-```sh
+### Selenoid (`twilio/selenoid`)
+Community-maintained Selenoid image family. VNC is built in, enabled via `ENABLE_VNC=true`.
+Minimal two-container setup: browser + seleniferous sidecar.
+- [chrome](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-twilio-chrome-example.yaml) · [firefox](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-twilio-firefox-example.yaml)
+```bash
 helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
 ```
 
-### Selenium Standalone (selenium/standalone)
-
-Official Selenium project standalone images with a built-in VNC server. Password is configured via `SE_VNC_PASSWORD`. Minimal two-container setup: browser + seleniferous sidecar.
-
-- [browserconfig-selenium-standalone-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenium-standalone-chrome-example.yaml) 
-- [browserconfig-selenium-standalone-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenium-standalone-firefox-example.yaml)
-
-```sh
+### Selenium Standalone (`selenium/standalone`)
+Official Selenium standalone images with a built-in VNC server (`SE_VNC_PASSWORD`).
+Minimal two-container setup: browser + seleniferous sidecar.
+- [chrome](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenium-standalone-chrome-example.yaml) · [firefox](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenium-standalone-firefox-example.yaml)
+```bash
 helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="${se_vnc_password}"
 ```
 
-### Moon (quay.io/browser)
-
-Images from Moon project, distributed via `quay.io/browser`. VNC requires a full X11 sidecar stack: `xvfb` (X server), `openbox` (window manager), and `x11vnc` (VNC server) — all from `quay.io/aerokube`. Also requires a `usergroup` ConfigMap (included in the manifests) to map the `user:4096` identity used by the browser containers.
-
-- [browserconfig-moon-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-chrome-example.yaml)
-- [browserconfig-moon-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-firefox-example.yaml)
-
-```sh
+### Moon (`quay.io/browser`)
+Moon images via `quay.io/browser`. VNC needs a full X11 sidecar stack (`xvfb`, `openbox`,
+`x11vnc` from `quay.io/aerokube`) plus a `usergroup` ConfigMap (included) mapping the
+`user:4096` identity.
+- [chrome](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-chrome-example.yaml) · [firefox](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-firefox-example.yaml)
+- Playwright CDP/BiDi variants: [chrome](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-chrome-example.yaml) · [firefox](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-firefox-example.yaml)
+```bash
 helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
 ```
 
-Playwright-specific Moon images for CDP/BiDi protocol sessions.
+### Playwright Standalone (`mcr.microsoft.com/playwright`)
+Official Microsoft Playwright base image (Chromium, Firefox, WebKit). `playwright-core` is
+installed via an init container; `run-server` starts a multi-browser WebSocket server and
+the client picks the browser at connect time.
+- [example](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-example.yaml)
 
-- [browserconfig-moon-playwright-chrome-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-chrome-example.yaml)
-- [browserconfig-moon-playwright-firefox-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-firefox-example.yaml)
+### Playwright MCP (`mcr.microsoft.com/playwright/mcp`)
+Microsoft Playwright MCP server image — browser automation over MCP Streamable HTTP,
+built-in MCP server, no init container.
+- [example](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-mcp-example.yaml)
 
-### Playwright Standalone (mcr.microsoft.com/playwright)
+</details>
 
-Official Microsoft Playwright base image. Contains Chromium, Firefox, and WebKit browsers. The `playwright-core` npm module is installed via an init container since the base image only ships browser binaries. The `run-server` command starts a multi-browser WebSocket server — the client chooses which browser to launch at connect time. Minimal two-container setup: browser + seleniferous sidecar.
+---
 
-- [browserconfig-playwright-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-example.yaml)
+## Service types & ingress
 
-### Playwright MCP (mcr.microsoft.com/playwright/mcp)
+Each service (`selenosis`, `browserService`, `browserUI`) supports `ClusterIP`,
+`NodePort`, or `LoadBalancer`, and `selenosis`/`browserUI` each have their own ingress
+block.
 
-Microsoft Playwright MCP server image. Exposes browser automation via MCP Streamable HTTP protocol. Lightweight image with a built-in MCP server — no init container needed. Minimal two-container setup: browser + seleniferous sidecar.
-
-- [browserconfig-playwright-mcp-example.yaml](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-mcp-example.yaml)
-
-## Service types
-
-Each service supports `ClusterIP`, `NodePort`, or `LoadBalancer`.
-
-Example values:
+<details>
+<summary><b>Service type values</b></summary>
 
 ```yaml
 browserUI:
@@ -152,40 +154,17 @@ selenosis:
     port: 4444
 ```
 
-Apply:
-
-```sh
+```bash
 helm upgrade --install selenosis . -n selenosis -f values.local.yaml
 ```
 
-## Ingress Configuration
+</details>
 
-Expose services via Ingress for external access with TLS and WebSocket support.
+<details>
+<summary><b>Ingress with TLS and WebSocket (NGINX)</b></summary>
 
-Each component (selenosis and browserUI) has its own ingress configuration under its respective section.
-
-### Basic Setup (NGINX Ingress Controller)
-
-```yaml
-selenosis:
-  ingress:
-    enabled: true
-    className: nginx
-    host: selenosis.example.com
-
-browserUI:
-  ingress:
-    enabled: true
-    className: nginx
-    host: ui.example.com
-    # CRITICAL: WebSocket support for VNC proxy
-    annotations:
-      nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
-      nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-      nginx.ingress.kubernetes.io/websocket-services: "browser-ui"
-```
-
-### With TLS/SSL Certificate
+Browser UI **requires WebSocket support** for the VNC proxy — the annotations below are
+required for the NGINX Ingress Controller (other controllers differ).
 
 ```yaml
 selenosis:
@@ -212,43 +191,30 @@ browserUI:
       secretName: browser-ui-tls
 ```
 
-**Important**: Browser UI requires WebSocket support for the VNC proxy. The above annotations are required for NGINX Ingress Controller. Other ingress controllers may require different annotations.
-
-Apply:
-
-```sh
+```bash
 helm upgrade --install selenosis . -n selenosis -f ingress-values.yaml
 ```
 
-## Maintainer Release Process
+</details>
 
-To create a new chart release:
+---
 
-1. Update `Chart.yaml` version:
-   ```yaml
-   version: 2.0.3
-   ```
+## Maintainer release process
 
-2. Commit and push:
-   ```sh
-   git add Chart.yaml
-   git commit -m "Bump chart version to 2.0.3"
-   git push
-   ```
+<details>
+<summary><b>How to cut a new chart release</b></summary>
 
-3. Create and push tag:
-   ```sh
-   git tag v2.0.3
-   git push origin v2.0.3
-   ```
+1. Bump `version` in `Chart.yaml`.
+2. Commit and push.
+3. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+4. GitHub Actions lints, packages, creates the GitHub Release, and publishes to the Helm
+   repository (GitHub Pages).
+5. Users upgrade: `helm repo update && helm upgrade selenosis selenosis/selenosis-deploy --version X.Y.Z`.
 
-4. GitHub Actions will automatically:
-   - Lint and package the chart
-   - Create GitHub Release with chart tarball
-   - Publish to Helm repository (GitHub Pages)
+</details>
 
-5. Users can now install the new version:
-   ```sh
-   helm repo update
-   helm upgrade selenosis selenosis/selenosis-deploy --version 2.0.3
-   ```
+---
+
+## License
+
+[Apache-2.0](./LICENSE)
