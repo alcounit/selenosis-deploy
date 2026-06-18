@@ -15,7 +15,7 @@
 | **[selenosis](https://github.com/alcounit/selenosis)** | Stateless Selenium / Playwright / MCP hub. |
 | **[seleniferous](https://github.com/alcounit/seleniferous)** | Sidecar proxy inside each browser pod (added to pods via `BrowserConfig`). |
 | **[browser-controller](https://github.com/alcounit/browser-controller)** | Operator that reconciles `Browser` / `BrowserConfig` CRDs into pods. |
-| **[browser-service](https://github.com/alcounit/browser-service)** | REST + SSE facade over `Browser` resources. |
+| **[browser-service](https://github.com/alcounit/browser-service)** | REST + SSE facade over `Browser` and `BrowserConfig` resources. |
 | **[browser-ui](https://github.com/alcounit/browser-ui)** | Web dashboard with live sessions + VNC. |
 
 `Browser` and `BrowserConfig` CRDs ship as Helm templates (`templates/crds/`) and are
