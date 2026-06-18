@@ -1,0 +1,35 @@
+# Patterns to ignore when building Helm packages.
+# Matched against the chart's root and any subdirectory.
+
+# Version control
+.git/
+.gitignore
+.github/
+.svn/
+.hg/
+.bzr/
+
+# CI / project metadata not needed at deploy time
+artifacthub-repo.yml
+.circleci/
+
+# Assets and local files (served/used outside the chart package)
+logo.png
+*.png
+*.jpg
+*.jpeg
+*.gif
+examples/
+values.local.yaml
+*.local.yaml
+*.tgz
+
+# OS / editor cruft
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
