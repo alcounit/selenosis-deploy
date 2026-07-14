@@ -86,31 +86,28 @@ kubectl apply -n selenosis -f ./examples/<filename>.yaml
 <details>
 <summary><b>Per-image families: Selenoid, Selenium Standalone, Moon, Playwright, Playwright MCP</b></summary>
 
+> **VNC password:** browser-ui no longer ships a global VNC password. When you open a
+> session in the UI it prompts for the password and can remember it per browser **name**
+> or **name + version**. Use the value baked into each image family below (`selenoid` for
+> Selenoid/Moon, or whatever you set via `SE_VNC_PASSWORD` for Selenium Standalone).
+
 ### Selenoid (`twilio/selenoid`)
-Community-maintained Selenoid image family. VNC is built in, enabled via `ENABLE_VNC=true`.
-Minimal two-container setup: browser + seleniferous sidecar.
+Community-maintained Selenoid image family. VNC is built in, enabled via `ENABLE_VNC=true`
+(password `selenoid`). Minimal two-container setup: browser + seleniferous sidecar.
 - [chrome](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-twilio-chrome-example.yaml) · [firefox](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenoid-twilio-firefox-example.yaml)
-```bash
-helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
-```
 
 ### Selenium Standalone (`selenium/standalone`)
-Official Selenium standalone images with a built-in VNC server (`SE_VNC_PASSWORD`).
+Official Selenium standalone images with a built-in VNC server; the password is whatever
+you set via `SE_VNC_PASSWORD` in the browserconfig.
 Minimal two-container setup: browser + seleniferous sidecar.
 - [chrome](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenium-standalone-chrome-example.yaml) · [firefox](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-selenium-standalone-firefox-example.yaml)
-```bash
-helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="${se_vnc_password}"
-```
 
 ### Moon (`quay.io/browser`)
-Moon images via `quay.io/browser`. VNC needs a full X11 sidecar stack (`xvfb`, `openbox`,
-`x11vnc` from `quay.io/aerokube`) plus a `usergroup` ConfigMap (included) mapping the
-`user:4096` identity.
+Moon images via `quay.io/browser` (VNC password `selenoid`). VNC needs a full X11 sidecar
+stack (`xvfb`, `openbox`, `x11vnc` from `quay.io/aerokube`) plus a `usergroup` ConfigMap
+(included) mapping the `user:4096` identity.
 - [chrome](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-chrome-example.yaml) · [firefox](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-firefox-example.yaml)
 - Playwright CDP/BiDi variants: [chrome](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-chrome-example.yaml) · [firefox](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-moon-playwright-firefox-example.yaml)
-```bash
-helm upgrade selenosis . -n selenosis --set browserUI.vncPassword="selenoid"
-```
 
 ### Playwright Standalone (`mcr.microsoft.com/playwright`)
 Official Microsoft Playwright base image (Chromium, Firefox, WebKit). `playwright-core` is

@@ -102,8 +102,11 @@ selenosis:
 
 browserUI:
   enabled: true
-  image: alcounit/browser-ui:v0.0.7
+  image: alcounit/browser-ui:v0.0.8
   replicas: 1
+  env: []
+  volumeMounts: []
+  volumes: []
   service:
     type: ClusterIP
     port: 8080
@@ -111,7 +114,6 @@ browserUI:
   listenAddr: ":8080"
   browserServiceURL: ""
   browserNamespace: ""
-  vncPassword: "secret"
   uiStaticPath: "/app/static"
   resources:
     requests:

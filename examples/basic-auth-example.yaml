@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: selenosis-basic-auth
+  namespace: selenosis
+type: Opaque
+stringData:
+  auth.json: |
+    [
+      { "user": "user1", "pass": "secret1" },
+      { "user": "user2", "pass": "secret2" }
+    ]

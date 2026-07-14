@@ -55,10 +55,19 @@ spec:
             value: {{ $browserServiceURL | quote }}
           - name: BROWSER_NAMESPACE
             value: {{ default .Release.Namespace .Values.browserUI.browserNamespace | quote }}
-          - name: VNC_PASSWORD
-            value: {{ .Values.browserUI.vncPassword | quote }}
           - name: UI_STATIC_PATH
             value: {{ .Values.browserUI.uiStaticPath | quote }}
+          {{- if .Values.browserUI.env }}
+          {{- toYaml .Values.browserUI.env | nindent 10 }}
+          {{- end }}
+        {{- if .Values.browserUI.volumeMounts }}
+        volumeMounts:
+          {{- toYaml .Values.browserUI.volumeMounts | nindent 10 }}
+        {{- end }}
         resources:
           {{- toYaml .Values.browserUI.resources | nindent 10 }}
+      {{- if .Values.browserUI.volumes }}
+      volumes:
+        {{- toYaml .Values.browserUI.volumes | nindent 8 }}
+      {{- end }}
 {{- end -}}
