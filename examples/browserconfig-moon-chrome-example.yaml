@@ -29,7 +29,7 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "alcounit/seleniferous:v2.0.7"
+      image: "alcounit/seleniferous:v2.0.8"
       env:
       - name: SESSION_CREATE_TIMEOUT
         value: "10m"

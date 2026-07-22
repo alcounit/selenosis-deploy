@@ -10,7 +10,7 @@ global:
 
 browserController:
   enabled: true
-  image: alcounit/browser-controller:v0.0.8
+  image: alcounit/browser-controller:v0.0.9
   replicas: 1
   serviceAccount:
     create: true
@@ -34,7 +34,7 @@ browserController:
 
 browserService:
   enabled: true
-  image: alcounit/browser-service:v0.0.7
+  image: alcounit/browser-service:v0.0.8
   replicas: 1
   serviceAccount:
     create: true
@@ -60,7 +60,7 @@ browserService:
 
 selenosis:
   enabled: true
-  image: alcounit/selenosis:v2.0.8
+  image: alcounit/selenosis:v2.0.9
   replicas: 1
   env: []
   volumeMounts: []
