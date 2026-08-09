@@ -4,6 +4,50 @@ entries:
   - annotations:
       artifacthub.io/images: |
         - name: selenosis
+          image: alcounit/selenosis:v2.1.0
+        - name: browser-controller
+          image: alcounit/browser-controller:v1.0.0
+        - name: browser-service
+          image: alcounit/browser-service:v0.0.9
+        - name: browser-ui
+          image: alcounit/browser-ui:v0.0.9
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: source
+          url: https://github.com/alcounit/selenosis
+        - name: documentation
+          url: https://github.com/alcounit/selenosis#readme
+    apiVersion: v2
+    appVersion: v2.1.0
+    created: "2026-08-09T14:17:00.892329168Z"
+    description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
+      selenosis, browser-ui)
+    digest: cf946cdc9d7ce2d0dcc46a7ea55861d2bdc71546b170754a61d1049ae805fd1a
+    home: https://github.com/alcounit/selenosis
+    icon: https://raw.githubusercontent.com/alcounit/selenosis-deploy/main/logo.png
+    keywords:
+    - selenium
+    - playwright
+    - mcp
+    - webdriver
+    - browser-automation
+    - selenium-grid
+    - kubernetes
+    - e2e-testing
+    maintainers:
+    - email: alcounit@gmail.com
+      name: alcounit
+    name: selenosis-deploy
+    sources:
+    - https://github.com/alcounit/selenosis-deploy
+    - https://github.com/alcounit/selenosis
+    type: application
+    urls:
+    - https://alcounit.github.io/selenosis-deploy/selenosis-deploy-2.1.2.tgz
+    version: 2.1.2
+  - annotations:
+      artifacthub.io/images: |
+        - name: selenosis
           image: alcounit/selenosis:v2.0.9
         - name: browser-controller
           image: alcounit/browser-controller:v0.0.9
@@ -19,7 +63,7 @@ entries:
           url: https://github.com/alcounit/selenosis#readme
     apiVersion: v2
     appVersion: v2.0.9
-    created: "2026-07-22T03:52:08.073511363Z"
+    created: "2026-08-09T14:17:00.891477786Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: a7a817e78aaaa381cd3a01493c56dec2a3f7271408fb949e338b6be5b675d909
@@ -63,7 +107,7 @@ entries:
           url: https://github.com/alcounit/selenosis#readme
     apiVersion: v2
     appVersion: v2.0.8
-    created: "2026-07-22T03:52:08.070466511Z"
+    created: "2026-08-09T14:17:00.890663659Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: 3a2adc6b53e80e50589faa64e08bb4546d7e9c971c8bf4319d403458f19c2d48
@@ -91,7 +135,7 @@ entries:
     version: 2.1.0
   - apiVersion: v2
     appVersion: develop
-    created: "2026-07-22T03:52:08.069161722Z"
+    created: "2026-08-09T14:17:00.889798426Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: c35e2bfd2e20b174dc9a73227a6894ef5e34a0c74d58b76f522ef457daac2001
@@ -102,7 +146,7 @@ entries:
     version: 2.0.9
   - apiVersion: v2
     appVersion: develop
-    created: "2026-07-22T03:52:08.058910561Z"
+    created: "2026-08-09T14:17:00.882933886Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: 5db1dc7a47f274a70162beb7ef56f728d9ea34a5a60d4f757380b0be595b8523
@@ -113,7 +157,7 @@ entries:
     version: 2.0.8
   - apiVersion: v2
     appVersion: develop
-    created: "2026-07-22T03:52:08.050803085Z"
+    created: "2026-08-09T14:17:00.877233379Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: 3284de347a5640a3d491b6f500297ac3e65ffedbc092ab78e30a89d09b127126
@@ -124,7 +168,7 @@ entries:
     version: 2.0.7
   - apiVersion: v2
     appVersion: develop
-    created: "2026-07-22T03:52:08.04557625Z"
+    created: "2026-08-09T14:17:00.872834643Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: 68f479c1523dea0661bf96bf270c18deebb0abab33ec4b159b29587a276064e7
@@ -135,7 +179,7 @@ entries:
     version: 2.0.6
   - apiVersion: v2
     appVersion: develop
-    created: "2026-07-22T03:52:08.036909399Z"
+    created: "2026-08-09T14:17:00.868458132Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: 8de840d9b8f19923c11d4f54eaf6ffb70d6915992957ca4fda34cfc9fb25484d
@@ -146,7 +190,7 @@ entries:
     version: 2.0.5
   - apiVersion: v2
     appVersion: develop
-    created: "2026-07-22T03:52:08.029079912Z"
+    created: "2026-08-09T14:17:00.863201373Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: bb4fda1e3e24d66853feffda080988e8ab058b1f44e75fc03890ef3cf2dd0d94
@@ -157,7 +201,7 @@ entries:
     version: 2.0.4
   - apiVersion: v2
     appVersion: develop
-    created: "2026-07-22T03:52:08.023695608Z"
+    created: "2026-08-09T14:17:00.859615081Z"
     description: Helm chart to deploy Selenosis services (browser-controller, browser-service,
       selenosis, browser-ui)
     digest: 0652f5c5e17e06d7e2c550d97783a32ea6de55dc51f3a9b502794fac30b6866b
@@ -166,4 +210,4 @@ entries:
     urls:
     - https://alcounit.github.io/selenosis-deploy/selenosis-deploy-2.0.3.tgz
     version: 2.0.3
-generated: "2026-07-22T03:52:08.019198207Z"
+generated: "2026-08-09T14:17:00.855883921Z"
