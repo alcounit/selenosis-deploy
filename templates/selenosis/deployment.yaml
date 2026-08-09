@@ -57,10 +57,10 @@ spec:
             value: {{ .Values.selenosis.proxyPort | quote }}
           - name: NAMESPACE
             value: {{ default .Release.Namespace .Values.selenosis.namespace | quote }}
-          - name: SESSION_CREATE_ATTEMPTS
-            value: {{ .Values.selenosis.sessionCreateAttempts | quote }}
           - name: SESSION_CREATE_TIMEOUT
             value: {{ .Values.selenosis.sessionCreateTimeout | quote }}
+          - name: BROWSER_STARTUP_TIMEOUT
+            value: {{ .Values.selenosis.browserStartupTimeout | quote }}
           {{- if .Values.selenosis.env }}
           {{- toYaml .Values.selenosis.env | nindent 10 }}
           {{- end }}

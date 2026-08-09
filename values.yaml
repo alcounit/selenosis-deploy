@@ -10,7 +10,7 @@ global:
 
 browserController:
   enabled: true
-  image: alcounit/browser-controller:v0.0.9
+  image: alcounit/browser-controller:v1.0.0
   replicas: 1
   serviceAccount:
     create: true
@@ -34,7 +34,7 @@ browserController:
 
 browserService:
   enabled: true
-  image: alcounit/browser-service:v0.0.8
+  image: alcounit/browser-service:v0.0.9
   replicas: 1
   serviceAccount:
     create: true
@@ -60,7 +60,7 @@ browserService:
 
 selenosis:
   enabled: true
-  image: alcounit/selenosis:v2.0.9
+  image: alcounit/selenosis:v2.1.0
   replicas: 1
   env: []
   volumeMounts: []
@@ -73,8 +73,8 @@ selenosis:
   browserServiceURL: ""
   proxyPort: "4445"
   namespace: ""
-  sessionCreateAttempts: 5
   sessionCreateTimeout: "3m"
+  browserStartupTimeout: "3m"
   resources:
     requests:
       cpu: "100m"
@@ -102,7 +102,7 @@ selenosis:
 
 browserUI:
   enabled: true
-  image: alcounit/browser-ui:v0.0.8
+  image: alcounit/browser-ui:v0.0.9
   replicas: 1
   env: []
   volumeMounts: []

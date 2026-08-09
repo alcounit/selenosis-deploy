@@ -13,7 +13,7 @@
 | Component | Role |
 | --- | --- |
 | **[selenosis](https://github.com/alcounit/selenosis)** | Stateless Selenium / Playwright / MCP hub. |
-| **[seleniferous](https://github.com/alcounit/seleniferous)** | Sidecar proxy inside each browser pod (added to pods via `BrowserConfig`). |
+| **[seleniferous](https://github.com/alcounit/seleniferous)** | Sidecar proxy inside each browser pod — **required in every `BrowserConfig`**, and the container must be named `seleniferous`. |
 | **[browser-controller](https://github.com/alcounit/browser-controller)** | Operator that reconciles `Browser` / `BrowserConfig` CRDs into pods. |
 | **[browser-service](https://github.com/alcounit/browser-service)** | REST + SSE facade over `Browser` and `BrowserConfig` resources. |
 | **[browser-ui](https://github.com/alcounit/browser-ui)** | Web dashboard with live sessions + VNC. |
@@ -82,6 +82,23 @@ Ready-to-use `BrowserConfig` manifests live in [`examples/`](https://github.com/
 ```bash
 kubectl apply -n selenosis -f ./examples/<filename>.yaml
 ```
+
+> **Writing your own?** Every `BrowserConfig` must declare the `seleniferous` sidecar, and
+> the container name is reserved — the hub waits for a container with that exact name
+> before proxying, and the controller treats its termination as fatal for the session.
+> Nothing rejects a config without it; the pods are simply created and never usable.
+>
+> ```yaml
+> template:
+>   sidecars:
+>   - name: seleniferous
+>     image: alcounit/seleniferous:v2.0.9
+>     env:
+>     - name: POD_IP
+>       valueFrom:
+>         fieldRef:
+>           fieldPath: status.podIP
+> ```
 
 <details>
 <summary><b>Per-image families: Selenoid, Selenium Standalone, Moon, Playwright, Playwright MCP</b></summary>
