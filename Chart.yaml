@@ -2,8 +2,8 @@ apiVersion: v2
 name: selenosis-deploy
 description: Helm chart to deploy Selenosis services (browser-controller, browser-service, selenosis, browser-ui)
 type: application
-version: 2.1.2
-appVersion: "v2.1.0"
+version: 2.1.3
+appVersion: "v2.1.1"
 home: https://github.com/alcounit/selenosis
 icon: https://raw.githubusercontent.com/alcounit/selenosis-deploy/main/logo.png
 sources:
@@ -30,7 +30,7 @@ annotations:
       url: https://github.com/alcounit/selenosis#readme
   artifacthub.io/images: |
     - name: selenosis
-      image: alcounit/selenosis:v2.1.0
+      image: alcounit/selenosis:v2.1.1
     - name: browser-controller
       image: alcounit/browser-controller:v1.0.0
     - name: browser-service

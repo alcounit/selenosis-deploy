@@ -60,7 +60,7 @@ browserService:
 
 selenosis:
   enabled: true
-  image: alcounit/selenosis:v2.1.0
+  image: alcounit/selenosis:v2.1.1
   replicas: 1
   env: []
   volumeMounts: []
