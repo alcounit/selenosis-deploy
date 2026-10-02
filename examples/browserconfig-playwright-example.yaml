@@ -7,6 +7,8 @@ spec:
   template:
     labels:
       app: browser
+    annotations:
+      selenosis.io/session.type: "playwright"
 
     resources:
       requests:
@@ -29,7 +31,7 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "alcounit/seleniferous:v2.1.2"
+      image: "alcounit/seleniferous:v2.1.3"
       env:
       - name: SESSION_CREATE_TIMEOUT
         value: "10m"

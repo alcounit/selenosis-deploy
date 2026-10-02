@@ -7,6 +7,9 @@ spec:
   template:
     labels:
       app: browser
+    annotations:
+      selenosis.io/session.type: "playwright"
+      selenosis.io/session.vnc: "true"
     env:
     - name: SCREEN_RESOLUTION
       value: 1920x1080
@@ -29,7 +32,7 @@ spec:
 
     sidecars:
     - name: seleniferous
-      image: "alcounit/seleniferous:v2.1.2"
+      image: "alcounit/seleniferous:v2.1.3"
       env:
       - name: SESSION_CREATE_TIMEOUT
         value: "10m"

@@ -1,6 +1,8 @@
 {{- if .Values.browserUI.enabled -}}
 {{- $browserServiceName := include "selenosis-deploy.componentName" (dict "root" . "component" "browser-service") -}}
 {{- $browserServiceURL := .Values.browserUI.browserServiceURL | default (printf "http://%s:%d" $browserServiceName (int .Values.browserService.service.port)) -}}
+{{- $selenosisName := include "selenosis-deploy.componentName" (dict "root" . "component" "selenosis") -}}
+{{- $selenosisURL := .Values.browserUI.selenosisURL | default (printf "http://%s:%d" $selenosisName (int .Values.selenosis.service.port)) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -53,6 +55,8 @@ spec:
             value: {{ .Values.browserUI.listenAddr | quote }}
           - name: BROWSER_SERVICE_URL
             value: {{ $browserServiceURL | quote }}
+          - name: SELENOSIS_URL
+            value: {{ $selenosisURL | quote }}
           - name: BROWSER_NAMESPACE
             value: {{ default .Release.Namespace .Values.browserUI.browserNamespace | quote }}
           - name: UI_STATIC_PATH

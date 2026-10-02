@@ -92,16 +92,21 @@ kubectl apply -n selenosis -f ./examples/<filename>.yaml
 > template:
 >   sidecars:
 >   - name: seleniferous
->     image: alcounit/seleniferous:v2.1.1
+>     image: alcounit/seleniferous:v2.1.3
 >     env:
 >     - name: POD_IP
 >       valueFrom:
 >         fieldRef:
 >           fieldPath: status.podIP
 > ```
+>
+> browser-ui also reads two annotations from the config: `selenosis.io/session.type`
+> (only `selenium` browsers appear in its create-browser menu) and
+> `selenosis.io/session.vnc: "true"` (VNC is off unless set). See
+> [Configuring browsers for the UI](https://github.com/alcounit/browser-ui#configuring-browsers-for-the-ui).
 
 <details>
-<summary><b>Per-image families: Selenoid, Selenium Standalone, Moon, Playwright, Playwright MCP</b></summary>
+<summary><b>Per-image families: Selenoid, Selenium Standalone, Moon, Playwright, Playwright MCP, DevTools</b></summary>
 
 > **VNC password:** browser-ui no longer ships a global VNC password. When you open a
 > session in the UI it prompts for the password and can remember it per browser **name**
@@ -136,6 +141,11 @@ the client picks the browser at connect time.
 Microsoft Playwright MCP server image — browser automation over MCP Streamable HTTP,
 built-in MCP server, no init container.
 - [example](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-playwright-mcp-example.yaml)
+
+### DevTools (`chromedp/headless-shell`)
+Headless Chrome with a debugging port, driven over CDP through `/devtools/{name}/{version}`.
+The sidecar points at it with `BROWSER_PORT=9222`; no VNC.
+- [example](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-devtools-example.yaml)
 
 </details>
 

@@ -10,7 +10,7 @@ global:
 
 browserController:
   enabled: true
-  image: alcounit/browser-controller:v1.0.0
+  image: alcounit/browser-controller:v1.0.1
   replicas: 1
   serviceAccount:
     create: true
@@ -60,7 +60,7 @@ browserService:
 
 selenosis:
   enabled: true
-  image: alcounit/selenosis:v2.1.1
+  image: alcounit/selenosis:v2.1.2
   replicas: 1
   env: []
   volumeMounts: []
@@ -102,7 +102,7 @@ selenosis:
 
 browserUI:
   enabled: true
-  image: alcounit/browser-ui:v0.0.9
+  image: alcounit/browser-ui:v1.0.0
   replicas: 1
   env: []
   volumeMounts: []
@@ -113,6 +113,7 @@ browserUI:
     nodePort: null
   listenAddr: ":8080"
   browserServiceURL: ""
+  selenosisURL: ""
   browserNamespace: ""
   uiStaticPath: "/app/static"
   resources:
