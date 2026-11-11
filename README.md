@@ -92,7 +92,7 @@ kubectl apply -n selenosis -f ./examples/<filename>.yaml
 > template:
 >   sidecars:
 >   - name: seleniferous
->     image: alcounit/seleniferous:v2.1.3
+>     image: alcounit/seleniferous:v2.1.4
 >     env:
 >     - name: POD_IP
 >       valueFrom:
@@ -148,6 +148,17 @@ The sidecar points at it with `BROWSER_PORT=9222`; no VNC.
 - [example](https://github.com/alcounit/selenosis-deploy/blob/main/examples/browserconfig-devtools-example.yaml)
 
 </details>
+
+---
+
+## Authentication
+
+selenosis and browser-ui each support Basic Auth through `BASIC_AUTH_FILE` (set via
+`<component>.env` and a mounted volume; see
+[`examples/basic-auth-example.yaml`](https://github.com/alcounit/selenosis-deploy/blob/main/examples/basic-auth-example.yaml)).
+browser-ui starts browsers through the hub and forwards the logged-in user's credentials, so
+**enable auth on both or on neither, with the same users file** — mount the same secret into
+both services.
 
 ---
 
