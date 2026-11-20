@@ -92,7 +92,7 @@ kubectl apply -n selenosis -f ./examples/<filename>.yaml
 > template:
 >   sidecars:
 >   - name: seleniferous
->     image: alcounit/seleniferous:v2.1.4
+>     image: alcounit/seleniferous:v2.1.5
 >     env:
 >     - name: POD_IP
 >       valueFrom:

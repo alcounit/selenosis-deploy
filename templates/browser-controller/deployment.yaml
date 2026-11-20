@@ -48,6 +48,7 @@ spec:
           - "--metrics-addr={{ .Values.browserController.metricsAddr }}"
           - "--health-probe-bind-address={{ .Values.browserController.healthProbeBindAddress }}"
           - "--enable-leader-election={{ .Values.browserController.leaderElection }}"
+          - "--max-workers={{ .Values.browserController.maxWorkers }}"
         ports:
           - name: metrics
             containerPort: 8080

@@ -20,6 +20,7 @@ browserController:
   metricsAddr: ":8080"
   healthProbeBindAddress: ":8081"
   leaderElection: false
+  maxWorkers: 4
   resources:
     requests:
       cpu: "100m"
@@ -102,7 +103,7 @@ selenosis:
 
 browserUI:
   enabled: true
-  image: alcounit/browser-ui:v1.0.1
+  image: alcounit/browser-ui:v1.0.2
   replicas: 1
   env: []
   volumeMounts: []
